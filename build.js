@@ -62,35 +62,60 @@
 
 	var _App2 = _interopRequireDefault(_App);
 
-	var _Login = __webpack_require__(24);
+	var _Login = __webpack_require__(43);
 
 	var _Login2 = _interopRequireDefault(_Login);
 
-	var _My = __webpack_require__(35);
+	var _My = __webpack_require__(54);
 
 	var _My2 = _interopRequireDefault(_My);
 
-	var _Message = __webpack_require__(41);
+	var _Message = __webpack_require__(60);
 
 	var _Message2 = _interopRequireDefault(_Message);
 
-	var _List = __webpack_require__(46);
+	var _List = __webpack_require__(65);
 
 	var _List2 = _interopRequireDefault(_List);
+
+	var _Lists = __webpack_require__(69);
+
+	var _Lists2 = _interopRequireDefault(_Lists);
+
+	var _Details = __webpack_require__(75);
+
+	var _Details2 = _interopRequireDefault(_Details);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	_vue2.default.use(_vueRouter2.default);
-	//1
-	var router = new _vueRouter2.default();
-	//2
-	router.map({
-	   '/': { component: _List2.default },
-	   '/login': { component: _Login2.default },
-	   '/my': { component: _My2.default },
-	   '/message': { component: _Message2.default }
+	_vue2.default.filter('trans_type', function (type) {
+		var v = void 0;
+		switch (type) {
+			case 'ask':
+				v = '问答';
+				break;
+			case 'share':
+				v = '分享';
+				break;
+			case 'job':
+				v = '招聘';
+				break;
+		}
+		return v;
 	});
-	//3
+
+	var router = new _vueRouter2.default();
+
+	router.map({
+		'/': { component: _List2.default },
+		'/lists/:type_/:page_': { component: _List2.default, name: 'lists' },
+		'/login': { component: _Login2.default, name: 'login' },
+		'/my': { component: _My2.default, name: 'my' },
+		'/message': { component: _Message2.default, name: 'message' },
+		'/details/:ixd': { component: _Details2.default, name: 'details' }
+	});
+
 	router.start(_vue2.default.extend(_App2.default), '#box');
 
 /***/ },
@@ -13888,7 +13913,7 @@
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] components\\App.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(34)
+	__vue_template__ = __webpack_require__(53)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -14244,21 +14269,21 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _actions = __webpack_require__(13);
+	var _actions = __webpack_require__(32);
 
-	var _Heade = __webpack_require__(14);
+	var _Heade = __webpack_require__(33);
 
 	var _Heade2 = _interopRequireDefault(_Heade);
 
-	var _Foot = __webpack_require__(19);
+	var _Foot = __webpack_require__(38);
 
 	var _Foot2 = _interopRequireDefault(_Foot);
 
-	var _Login = __webpack_require__(24);
+	var _Login = __webpack_require__(43);
 
 	var _Login2 = _interopRequireDefault(_Login);
 
-	var _selfInfo = __webpack_require__(29);
+	var _selfInfo = __webpack_require__(48);
 
 	var _selfInfo2 = _interopRequireDefault(_selfInfo);
 
@@ -14323,11 +14348,17 @@
 	  value: true
 	});
 
+	var _defineProperty2 = __webpack_require__(12);
+
+	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+	var _state;
+
 	var _vue = __webpack_require__(1);
 
 	var _vue2 = _interopRequireDefault(_vue);
 
-	var _vuex = __webpack_require__(12);
+	var _vuex = __webpack_require__(31);
 
 	var _vuex2 = _interopRequireDefault(_vuex);
 
@@ -14335,7 +14366,7 @@
 
 	_vue2.default.use(_vuex2.default);
 
-	var state = {
+	var state = (_state = {
 	  login: false, //是否登录
 	  accesstoken: '', //用户accesstoken 
 	  user: '', //用户信息
@@ -14345,25 +14376,14 @@
 	  noread_num: 0, //未读消息数量
 	  msg: '', //消息内容
 
-	  notes: [1, 2],
-	  test: 1,
-	  activeNote: {}
-	};
+	  list: '', //首页文章列表
+	  page_nub: 1, //文章页码
+	  list_type: 'all' }, (0, _defineProperty3.default)(_state, 'article', ''), (0, _defineProperty3.default)(_state, 'tips', {
+	  show: false,
+	  cont: '加载中...'
+	}), _state);
 
 	var mutations = {
-	  EDIT_NOTE: function EDIT_NOTE(state, text) {
-	    state.activeNote.text = text;
-	  },
-	  DELETE_NOTE: function DELETE_NOTE(state) {
-	    state.notes.$remove(state.activeNote);
-	    state.activeNote = state.notes[0];
-	  },
-	  SET_ACTIVE_NOTE: function SET_ACTIVE_NOTE(state, note) {
-	    state.activeNote = note;
-	  },
-	  CHEACK_TOKEN: function CHEACK_TOKEN(state, id) {
-	    alert(id + 'asd');
-	  },
 
 	  //检测token成功设置
 	  TOKEN_SUC: function TOKEN_SUC(state, user, token) {
@@ -14403,6 +14423,36 @@
 	  //设置消息内容
 	  SET_USER_MESSAGES: function SET_USER_MESSAGES(state, msg) {
 	    state.msg = msg;
+	  },
+
+	  //文章类型改变
+	  TYPE_CHANGE: function TYPE_CHANGE(state, type) {
+	    if (state.list_type !== type) {
+	      state.list_type = type;
+	      state.page_nub = 1;
+	      //alert(state.page_nub)
+	    }
+	  },
+
+	  //设置获取到的文章列表
+	  GET_LIST_SUC: function GET_LIST_SUC(state, data, ty, pa) {
+	    state.list = data;
+	    state.tips.show = false;
+	    state.list_type = ty;
+	    state.page_nub = pa;
+	    //alert('asd'+state.page_nub)
+	    //console.log(pa)
+	  },
+
+	  //显示加载中提示
+	  LOAD: function LOAD(state) {
+	    state.tips.show = true;
+	  },
+
+	  //添加文章详情
+	  LOAD_INNER: function LOAD_INNER(state, inner) {
+	    state.article = inner;
+	    //console.log(123,inner.content)
 	  }
 	};
 
@@ -14413,6 +14463,298 @@
 
 /***/ },
 /* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	exports.__esModule = true;
+
+	var _defineProperty = __webpack_require__(13);
+
+	var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = function (obj, key, value) {
+	  if (key in obj) {
+	    (0, _defineProperty2.default)(obj, key, {
+	      value: value,
+	      enumerable: true,
+	      configurable: true,
+	      writable: true
+	    });
+	  } else {
+	    obj[key] = value;
+	  }
+
+	  return obj;
+	};
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(14), __esModule: true };
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(15);
+	var $Object = __webpack_require__(18).Object;
+	module.exports = function defineProperty(it, key, desc){
+	  return $Object.defineProperty(it, key, desc);
+	};
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $export = __webpack_require__(16);
+	// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
+	$export($export.S + $export.F * !__webpack_require__(26), 'Object', {defineProperty: __webpack_require__(22).f});
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var global    = __webpack_require__(17)
+	  , core      = __webpack_require__(18)
+	  , ctx       = __webpack_require__(19)
+	  , hide      = __webpack_require__(21)
+	  , PROTOTYPE = 'prototype';
+
+	var $export = function(type, name, source){
+	  var IS_FORCED = type & $export.F
+	    , IS_GLOBAL = type & $export.G
+	    , IS_STATIC = type & $export.S
+	    , IS_PROTO  = type & $export.P
+	    , IS_BIND   = type & $export.B
+	    , IS_WRAP   = type & $export.W
+	    , exports   = IS_GLOBAL ? core : core[name] || (core[name] = {})
+	    , expProto  = exports[PROTOTYPE]
+	    , target    = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE]
+	    , key, own, out;
+	  if(IS_GLOBAL)source = name;
+	  for(key in source){
+	    // contains in native
+	    own = !IS_FORCED && target && target[key] !== undefined;
+	    if(own && key in exports)continue;
+	    // export native or passed
+	    out = own ? target[key] : source[key];
+	    // prevent global pollution for namespaces
+	    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
+	    // bind timers to global for call from export context
+	    : IS_BIND && own ? ctx(out, global)
+	    // wrap global constructors for prevent change them in library
+	    : IS_WRAP && target[key] == out ? (function(C){
+	      var F = function(a, b, c){
+	        if(this instanceof C){
+	          switch(arguments.length){
+	            case 0: return new C;
+	            case 1: return new C(a);
+	            case 2: return new C(a, b);
+	          } return new C(a, b, c);
+	        } return C.apply(this, arguments);
+	      };
+	      F[PROTOTYPE] = C[PROTOTYPE];
+	      return F;
+	    // make static versions for prototype methods
+	    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
+	    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
+	    if(IS_PROTO){
+	      (exports.virtual || (exports.virtual = {}))[key] = out;
+	      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
+	      if(type & $export.R && expProto && !expProto[key])hide(expProto, key, out);
+	    }
+	  }
+	};
+	// type bitmap
+	$export.F = 1;   // forced
+	$export.G = 2;   // global
+	$export.S = 4;   // static
+	$export.P = 8;   // proto
+	$export.B = 16;  // bind
+	$export.W = 32;  // wrap
+	$export.U = 64;  // safe
+	$export.R = 128; // real proto method for `library` 
+	module.exports = $export;
+
+/***/ },
+/* 17 */
+/***/ function(module, exports) {
+
+	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+	var global = module.exports = typeof window != 'undefined' && window.Math == Math
+	  ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
+	if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	var core = module.exports = {version: '2.4.0'};
+	if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// optional / simple context binding
+	var aFunction = __webpack_require__(20);
+	module.exports = function(fn, that, length){
+	  aFunction(fn);
+	  if(that === undefined)return fn;
+	  switch(length){
+	    case 1: return function(a){
+	      return fn.call(that, a);
+	    };
+	    case 2: return function(a, b){
+	      return fn.call(that, a, b);
+	    };
+	    case 3: return function(a, b, c){
+	      return fn.call(that, a, b, c);
+	    };
+	  }
+	  return function(/* ...args */){
+	    return fn.apply(that, arguments);
+	  };
+	};
+
+/***/ },
+/* 20 */
+/***/ function(module, exports) {
+
+	module.exports = function(it){
+	  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
+	  return it;
+	};
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var dP         = __webpack_require__(22)
+	  , createDesc = __webpack_require__(30);
+	module.exports = __webpack_require__(26) ? function(object, key, value){
+	  return dP.f(object, key, createDesc(1, value));
+	} : function(object, key, value){
+	  object[key] = value;
+	  return object;
+	};
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var anObject       = __webpack_require__(23)
+	  , IE8_DOM_DEFINE = __webpack_require__(25)
+	  , toPrimitive    = __webpack_require__(29)
+	  , dP             = Object.defineProperty;
+
+	exports.f = __webpack_require__(26) ? Object.defineProperty : function defineProperty(O, P, Attributes){
+	  anObject(O);
+	  P = toPrimitive(P, true);
+	  anObject(Attributes);
+	  if(IE8_DOM_DEFINE)try {
+	    return dP(O, P, Attributes);
+	  } catch(e){ /* empty */ }
+	  if('get' in Attributes || 'set' in Attributes)throw TypeError('Accessors not supported!');
+	  if('value' in Attributes)O[P] = Attributes.value;
+	  return O;
+	};
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var isObject = __webpack_require__(24);
+	module.exports = function(it){
+	  if(!isObject(it))throw TypeError(it + ' is not an object!');
+	  return it;
+	};
+
+/***/ },
+/* 24 */
+/***/ function(module, exports) {
+
+	module.exports = function(it){
+	  return typeof it === 'object' ? it !== null : typeof it === 'function';
+	};
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = !__webpack_require__(26) && !__webpack_require__(27)(function(){
+	  return Object.defineProperty(__webpack_require__(28)('div'), 'a', {get: function(){ return 7; }}).a != 7;
+	});
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// Thank's IE8 for his funny defineProperty
+	module.exports = !__webpack_require__(27)(function(){
+	  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
+	});
+
+/***/ },
+/* 27 */
+/***/ function(module, exports) {
+
+	module.exports = function(exec){
+	  try {
+	    return !!exec();
+	  } catch(e){
+	    return true;
+	  }
+	};
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var isObject = __webpack_require__(24)
+	  , document = __webpack_require__(17).document
+	  // in old IE typeof document.createElement is 'object'
+	  , is = isObject(document) && isObject(document.createElement);
+	module.exports = function(it){
+	  return is ? document.createElement(it) : {};
+	};
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// 7.1.1 ToPrimitive(input [, PreferredType])
+	var isObject = __webpack_require__(24);
+	// instead of the ES6 spec version, we didn't implement @@toPrimitive case
+	// and the second argument - flag - preferred type is a string
+	module.exports = function(it, S){
+	  if(!isObject(it))return it;
+	  var fn, val;
+	  if(S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+	  if(typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it)))return val;
+	  if(!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+	  throw TypeError("Can't convert object to primitive value");
+	};
+
+/***/ },
+/* 30 */
+/***/ function(module, exports) {
+
+	module.exports = function(bitmap, value){
+	  return {
+	    enumerable  : !(bitmap & 1),
+	    configurable: !(bitmap & 2),
+	    writable    : !(bitmap & 4),
+	    value       : value
+	  };
+	};
+
+/***/ },
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -15051,7 +15393,7 @@
 	}));
 
 /***/ },
-/* 13 */
+/* 32 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -15190,23 +15532,54 @@
 		});
 	};
 
-	var ddd = exports.ddd = function ddd(_ref7) {
+	/*export const type_change=({dispatch},e)=>{
+		let type_=e.target.getAttribute('thistype');
+		dispatch('TYPE_CHANGE',type_);
+	}*/
+	var get_list = exports.get_list = function get_list(_ref7, type, page) {
 		var dispatch = _ref7.dispatch;
+
+		//alert(type+"+"+page)
+		dispatch('TYPE_CHANGE', type);
+		dispatch('LOAD');
+		get_('https://cnodejs.org/api/v1/topics?limit=20&tab=' + type + '&page=' + page).then(function (data) {
+			//console.log(1,data.data)
+			if (data.success) {
+				dispatch('GET_LIST_SUC', data.data, type, page);
+			}
+		});
+	};
+
+	var load_inner = exports.load_inner = function load_inner(_ref8, ixd) {
+		var dispatch = _ref8.dispatch;
+
+		if (ixd) {
+			get_('https://cnodejs.org/api/v1/topic/' + ixd).then(function (data) {
+				//console.log(1,data.data)
+				if (data.success) {
+					//console.log("wdk",data.data)
+					dispatch('LOAD_INNER', data.data);
+				}
+			});
+		}
+	};
+	var aaa = exports.aaa = function aaa(_ref9) {
+		var dispatch = _ref9.dispatch;
 	};
 
 /***/ },
-/* 14 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
-	__webpack_require__(15)
-	__vue_script__ = __webpack_require__(17)
+	__webpack_require__(34)
+	__vue_script__ = __webpack_require__(36)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] components\\Heade.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(18)
+	__vue_template__ = __webpack_require__(37)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -15231,13 +15604,13 @@
 	})()}
 
 /***/ },
-/* 15 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(16);
+	var content = __webpack_require__(35);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -15257,7 +15630,7 @@
 	}
 
 /***/ },
-/* 16 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(8)();
@@ -15271,7 +15644,7 @@
 
 
 /***/ },
-/* 17 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15280,7 +15653,7 @@
 		value: true
 	});
 
-	var _actions = __webpack_require__(13);
+	var _actions = __webpack_require__(32);
 
 	exports.default = {
 		ready: function ready() {
@@ -15345,8 +15718,8 @@
 	// 					<li><a href="javascript:;" @click="signOut">退出</a></li>
 	// 				</ul>
 	// 				<ul v-else>
-	// 					<li><a v-link="{ path: '/'}">首页</a></li>
-	// 					<li><a v-link="{ path: '/login'}">登录</a></li>
+	// 					<li class="wap_"><a v-link="{ path: '/'}">首页</a></li>
+	// 					<li class="wap_"><a v-link="{ path: '/login'}">登录</a></li>
 	// 				</ul>
 	// 			</nav>
 	// 			</div>
@@ -15355,24 +15728,24 @@
 	// <script>
 
 /***/ },
-/* 18 */
+/* 37 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<header class=\"head\">\n\t<div class=\"header_box\">\n\t<a v-link=\"{ path: '/'}\">\n\t\t<img src=\"https://o4j806krb.qnssl.com/public/images/cnodejs_light.svg\" alt=\"\" id=\"logo\">\n\t</a>\n\t\t<nav>\n\t\t\t<ul v-if=\"login\">\n\t\t\t\t<li><a v-link=\"{ path: '/'}\">首页</a></li>\n\t\t\t\t<li class=\"noread_msg\"><a v-link=\"{ path: '/message'}\">消息<div class=\"noread_num\" v-if=\"noread_num>0\"></div></a></li>\n\t\t\t\t<li><a v-link=\"{ path: '/my'}\">{{user.loginname}}</a></li>\n\t\t\t\t<li><a href=\"javascript:;\" @click=\"signOut\">退出</a></li>\n\t\t\t</ul>\n\t\t\t<ul v-else>\n\t\t\t\t<li><a v-link=\"{ path: '/'}\">首页</a></li>\n\t\t\t\t<li><a v-link=\"{ path: '/login'}\">登录</a></li>\n\t\t\t</ul>\n\t\t</nav>\n\t\t</div>\n</header>\n";
+	module.exports = "\n<header class=\"head\">\n\t<div class=\"header_box\">\n\t<a v-link=\"{ path: '/'}\">\n\t\t<img src=\"https://o4j806krb.qnssl.com/public/images/cnodejs_light.svg\" alt=\"\" id=\"logo\">\n\t</a>\n\t\t<nav>\n\t\t\t<ul v-if=\"login\">\n\t\t\t\t<li><a v-link=\"{ path: '/'}\">首页</a></li>\n\t\t\t\t<li class=\"noread_msg\"><a v-link=\"{ path: '/message'}\">消息<div class=\"noread_num\" v-if=\"noread_num>0\"></div></a></li>\n\t\t\t\t<li><a v-link=\"{ path: '/my'}\">{{user.loginname}}</a></li>\n\t\t\t\t<li><a href=\"javascript:;\" @click=\"signOut\">退出</a></li>\n\t\t\t</ul>\n\t\t\t<ul v-else>\n\t\t\t\t<li class=\"wap_\"><a v-link=\"{ path: '/'}\">首页</a></li>\n\t\t\t\t<li class=\"wap_\"><a v-link=\"{ path: '/login'}\">登录</a></li>\n\t\t\t</ul>\n\t\t</nav>\n\t\t</div>\n</header>\n";
 
 /***/ },
-/* 19 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
-	__webpack_require__(20)
-	__vue_script__ = __webpack_require__(22)
+	__webpack_require__(39)
+	__vue_script__ = __webpack_require__(41)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] components\\Foot.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(23)
+	__vue_template__ = __webpack_require__(42)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -15397,13 +15770,13 @@
 	})()}
 
 /***/ },
-/* 20 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(21);
+	var content = __webpack_require__(40);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -15423,7 +15796,7 @@
 	}
 
 /***/ },
-/* 21 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(8)();
@@ -15437,7 +15810,7 @@
 
 
 /***/ },
-/* 22 */
+/* 41 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -15461,24 +15834,24 @@
 	// </style>
 
 /***/ },
-/* 23 */
+/* 42 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<footer class=\"foot\">\n\t<div>\n\t\t<p>CNode 社区为国内最专业的 Node.js 开源技术社区，致力于 Node.js 的技术研究。</p>\n\t</div>\n</footer>\n";
 
 /***/ },
-/* 24 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
-	__webpack_require__(25)
-	__vue_script__ = __webpack_require__(27)
+	__webpack_require__(44)
+	__vue_script__ = __webpack_require__(46)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] components\\Login.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(28)
+	__vue_template__ = __webpack_require__(47)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -15503,13 +15876,13 @@
 	})()}
 
 /***/ },
-/* 25 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(26);
+	var content = __webpack_require__(45);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -15529,7 +15902,7 @@
 	}
 
 /***/ },
-/* 26 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(8)();
@@ -15543,7 +15916,7 @@
 
 
 /***/ },
-/* 27 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15556,7 +15929,7 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _actions = __webpack_require__(13);
+	var _actions = __webpack_require__(32);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -15628,24 +16001,24 @@
 	// </style>
 
 /***/ },
-/* 28 */
+/* 47 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<div class=\"lists\">\n\t<input type=\"text\" maxlength=\"40\" v-model=\"myToken\" class=\"form-control\">\t\n\t<a href=\"javascript:;\" class=\"btn btn-primary\" @click.prevent.stop=\"subToken\">登录</a>\n\t<p class=\"bg-danger\" v-if=\"token_err\">Token错误</p>\n</div>\n";
 
 /***/ },
-/* 29 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
-	__webpack_require__(30)
-	__vue_script__ = __webpack_require__(32)
+	__webpack_require__(49)
+	__vue_script__ = __webpack_require__(51)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] components\\selfInfo.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(33)
+	__vue_template__ = __webpack_require__(52)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -15670,13 +16043,13 @@
 	})()}
 
 /***/ },
-/* 30 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(31);
+	var content = __webpack_require__(50);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -15696,7 +16069,7 @@
 	}
 
 /***/ },
-/* 31 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(8)();
@@ -15710,7 +16083,7 @@
 
 
 /***/ },
-/* 32 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15719,7 +16092,7 @@
 		value: true
 	});
 
-	var _actions = __webpack_require__(13);
+	var _actions = __webpack_require__(32);
 
 	exports.default = {
 		data: function data() {
@@ -15823,30 +16196,30 @@
 	// <script>
 
 /***/ },
-/* 33 */
+/* 52 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<aside>\n<template v-if=\"login\">\n\t<div class=\"comdiv\">\n\t\t<div class=\"comtit\">个人信息</div>\n\t\t<div class=\"selfinfo\">\n\t\t\t<a href=\"javascript:;\" v-link=\"{ path: '/my'}\">\n\t\t\t\t<img :src=user.avatar_url alt=\"\">\n\t\t\t</a>\n\t\t\t<span>{{user.loginname}}</span>\n\t\t\t<p>积分：{{user_rep.score}}</p>\n\t\t\t<div class=\"fatie\" v-link=\"{path:'/post'}\">发帖</div>\n\t\t</div>\n\t</div>\n</template>\n<template v-else>\n\t<div class=\"comdiv\">\n\t\t<div class=\"comtit\">CNode：Node.js专业中文社区</div>\n\t\t<div class=\"login_\">\n\t\t\t<div v-link=\"{ path: '/login'}\">登录</div>\n\t\t</div>\n\t</div>\n</template>\n\n</aside>\n";
 
 /***/ },
-/* 34 */
+/* 53 */
 /***/ function(module, exports) {
 
 	module.exports = "\n\n\t<heade></heade>\n\n    <section class=\"main\">\n\t\t<self-info></self-info>\n\t\t<router-view></router-view>\n    </section>\n\n    <foot></foot>\n    \n";
 
 /***/ },
-/* 35 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
-	__webpack_require__(36)
-	__vue_script__ = __webpack_require__(38)
+	__webpack_require__(55)
+	__vue_script__ = __webpack_require__(57)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] components\\My.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(40)
+	__vue_template__ = __webpack_require__(59)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -15871,13 +16244,13 @@
 	})()}
 
 /***/ },
-/* 36 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(37);
+	var content = __webpack_require__(56);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -15897,7 +16270,7 @@
 	}
 
 /***/ },
-/* 37 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(8)();
@@ -15911,7 +16284,7 @@
 
 
 /***/ },
-/* 38 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15920,7 +16293,7 @@
 		value: true
 	});
 
-	var _when = __webpack_require__(39);
+	var _when = __webpack_require__(58);
 
 	exports.default = {
 		data: function data() {
@@ -16019,7 +16392,7 @@
 	//import { addplus } from '../vuex/actions.js'
 
 /***/ },
-/* 39 */
+/* 58 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -16066,24 +16439,24 @@
 	};
 
 /***/ },
-/* 40 */
+/* 59 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<div class=\"lists\" style=\"background: #e1e1e1\">\n\t<div class=\"selfinfo\">\n\t\t<a href=\"javascript:;\" v-link=\"{ path: '/my'}\">\n\t\t\t<img :src=user.avatar_url alt=\"\">\n\t\t</a>\n\t\t<span>{{user.loginname}}</span>\n\t\t<p>积分：{{user_rep.score}}</p>\n\t\t<p class=\"e5\">github：{{user_rep.githubUsername}}</p>\n\t\t<p>注册于{{ when_(user_rep.create_at) }}</p>\n\t</div>\n\t<div class=\"_title_\">最近创建的话题</div>\n\t<ul class=\"yhf_and_ohf\">\n\t\t<li v-for=\"item in user_rep.recent_topics\">\n\t\t\t<span class=\"fl\"><img :src=\"item.author.avatar_url\" alt=\"{{item.author.loginname}}\" title=\"{{item.author.loginname}}\"></span>\n\t\t\t<span class=\"fr e5\">{{ when_(item.last_reply_at) }}</span>\n\t\t\t<span :thisid=\"item.id\" class=\"text_content\">{{item.title}}</span>\n\t\t</li>\n\t</ul>\n\t<div class=\"_title_\">最近参与的话题</div>\n\t<ul class=\"yhf_and_ohf\">\n\t\t<li v-for=\"item in user_rep.recent_replies\">\n\t\t\t<span class=\"fl\"><img :src=\"item.author.avatar_url\" alt=\"{{item.author.loginname}}\" title=\"{{item.author.loginname}}\"></span>\n\t\t\t<span class=\"fr e5\">{{ when_( item.last_reply_at) }}</span>\n\t\t\t<span :thisid=\"item.id\" class=\"text_content\">{{item.title}}</span>\n\t\t</li>\n\t</ul>\n</div>\n\n";
 
 /***/ },
-/* 41 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
-	__webpack_require__(42)
-	__vue_script__ = __webpack_require__(44)
+	__webpack_require__(61)
+	__vue_script__ = __webpack_require__(63)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] components\\Message.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(45)
+	__vue_template__ = __webpack_require__(64)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -16108,13 +16481,13 @@
 	})()}
 
 /***/ },
-/* 42 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(43);
+	var content = __webpack_require__(62);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -16134,7 +16507,7 @@
 	}
 
 /***/ },
-/* 43 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(8)();
@@ -16142,13 +16515,13 @@
 
 
 	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n._title_{\n\tbackground: #fff;\n\tmargin-top: 15px;\n\theight: 40px;\n\tline-height: 40px;\n\tpadding-left: 10px;\n}\n.selfinfo{\n\tbackground: #fff;\n}\n.text_content{\n\tline-height: 30px;\n\theight: 30px;\n\tdisplay: block;\n\tmargin-left: 35px;\n\tmargin-right: 80px;\n}\n.yhf_and_ohf>li{\n\theight: 50px;\n\tcursor: pointer;\n\tpadding: 10px;\n\tbackground: #fff;\n}\n.yhf_and_ohf>li:hover{\n\tbackground: #e5e5e5;\n}\n.yhf_and_ohf>li img{\n\twidth: 30px;\n\theight: 30px;\n}\n.wqe{\n\tline-height: 30px;\n}\n.wqe img{\n\tvertical-align: middle;\n}\n.all_read_c{\n    width: 120px;\n    height: 37px;\n    background: #80bd01;\n    line-height: 37px;\n    text-align: center;\n    color: #fff;\n    margin: 15px 0;\n    border-radius: 3px;\n    cursor: pointer;\n}\n", ""]);
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\t._title_{\n\t\tbackground: #fff;\n\t\tmargin-top: 15px;\n\t\theight: 40px;\n\t\tline-height: 40px;\n\t\tpadding-left: 10px;\n\t}\n\t.selfinfo{\n\t\tbackground: #fff;\n\t}\n\t.text_content{\n\t\tline-height: 30px;\n\t\theight: 30px;\n\t\tdisplay: block;\n\t\tmargin-left: 35px;\n\t\tmargin-right: 80px;\n\t    overflow: hidden;\n    \ttext-overflow: ellipsis;\n\t\twhite-space: nowrap;\n\t}\n\t.yhf_and_ohf>li{\n\t\theight: 50px;\n\t\tcursor: pointer;\n\t\tpadding: 10px;\n\t\tbackground: #fff;\n\t}\n\t.yhf_and_ohf>li:hover{\n\t\tbackground: #e5e5e5;\n\t}\n\t.yhf_and_ohf>li img{\n\t\twidth: 30px;\n\t\theight: 30px;\n\t}\n\t.wqe{\n\t\tline-height: 30px;\n\t}\n\t.wqe img{\n\t\tvertical-align: middle;\n\t}\n\t.all_read_c{\n\t    width: 120px;\n\t    height: 37px;\n\t    background: #80bd01;\n\t    line-height: 37px;\n\t    text-align: center;\n\t    color: #fff;\n\t    margin: 15px 0;\n\t    border-radius: 3px;\n\t    cursor: pointer;\n\t}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 44 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16157,7 +16530,7 @@
 		value: true
 	});
 
-	var _actions = __webpack_require__(13);
+	var _actions = __webpack_require__(32);
 
 	exports.default = {
 		vuex: {
@@ -16203,6 +16576,9 @@
 	// 		display: block;
 	// 		margin-left: 35px;
 	// 		margin-right: 80px;
+	// 	    overflow: hidden;
+	//     	text-overflow: ellipsis;
+	// 		white-space: nowrap;
 	// 	}
 	// 	.yhf_and_ohf>li{
 	// 		height: 50px;
@@ -16265,24 +16641,24 @@
 	// <script>
 
 /***/ },
-/* 45 */
+/* 64 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<div class=\"lists\" style=\"background: #e1e1e1\">\n\t<div class=\"_title_\">未读消息</div>\n\t<ul class=\"yhf_and_ohf\">\n\t\t<li v-for=\"item in msg.hasnot_read_messages\">\n\t\t\t<span class=\"fl wqe\">\n\t\t\t\t<img :src=\"item.author.avatar_url\" alt=\"{{item.author.loginname}}\" title=\"{{item.author.loginname}}\">\n\t\t\t\t&nbsp;\n\t\t\t\t<span class=\"bule_\">{{item.author.loginname}}</span>&nbsp;回复了你的话题&nbsp;\n\t\t\t</span>\n\t\t\t<span :thisid=\"item.id\" class=\"text_content bule_\">{{item.topic.title}}</span>\n\t\t</li>\n\t</ul>\n\t<div class=\"_title_\">已读消息</div>\n\t<ul class=\"yhf_and_ohf\">\n\t\t<li v-for=\"item in msg.has_read_messages\">\n\t\t\t<span class=\"fl wqe\">\n\t\t\t\t<img :src=\"item.author.avatar_url\" alt=\"{{item.author.loginname}}\" title=\"{{item.author.loginname}}\">\n\t\t\t\t&nbsp;\n\t\t\t\t<span class=\"bule_\">{{item.author.loginname}}</span>&nbsp;回复了你的话题&nbsp;\n\t\t\t</span>\n\t\t\t<span :thisid=\"item.id\" class=\"text_content bule_\">{{item.topic.title}}</span>\n\t\t</li>\n\t</ul>\n</div>\n<div @click=\"all_read_x\" class=\"all_read_c\">全部标记为已读</div>\t\n";
 
 /***/ },
-/* 46 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
-	__webpack_require__(47)
-	__vue_script__ = __webpack_require__(49)
+	__webpack_require__(66)
+	__vue_script__ = __webpack_require__(68)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] components\\List.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(50)
+	__vue_template__ = __webpack_require__(74)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -16307,13 +16683,13 @@
 	})()}
 
 /***/ },
-/* 47 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(48);
+	var content = __webpack_require__(67);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(9)(content, {});
@@ -16333,7 +16709,7 @@
 	}
 
 /***/ },
-/* 48 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(8)();
@@ -16341,13 +16717,13 @@
 
 
 	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.bg-danger{\r\n\twidth: 96%;\r\n}\r\n\r\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 49 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16360,69 +16736,511 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _actions = __webpack_require__(13);
+	var _actions = __webpack_require__(32);
 
-	var _Heade = __webpack_require__(14);
+	var _Lists = __webpack_require__(69);
 
-	var _Heade2 = _interopRequireDefault(_Heade);
-
-	var _Foot = __webpack_require__(19);
-
-	var _Foot2 = _interopRequireDefault(_Foot);
-
-	var _Login = __webpack_require__(24);
-
-	var _Login2 = _interopRequireDefault(_Login);
-
-	var _selfInfo = __webpack_require__(29);
-
-	var _selfInfo2 = _interopRequireDefault(_selfInfo);
+	var _Lists2 = _interopRequireDefault(_Lists);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// <template>
-	//
-	//     1
-	// </template>
-	// <script>
 	exports.default = {
-		data: function data() {
-			return {
-				a: 1
-			};
-		},
+		route: {
+			data: function data(_ref) {
+				var _ref$to$params = _ref.to.params;
+				var _ref$to$params$type_ = _ref$to$params.type_;
+				var type_ = _ref$to$params$type_ === undefined ? 'all' : _ref$to$params$type_;
+				var _ref$to$params$page_ = _ref$to$params.page_;
+				var page_ = _ref$to$params$page_ === undefined ? 1 : _ref$to$params$page_;
 
-		store: _store2.default,
+				var topictype_ = type_;
+				var currentpage_ = page_;
+				//alert(topicTab+"+"+page_)
+				// 获取文章列表
+				this.get_list(topictype_, currentpage_);
+			}
+		},
 		vuex: {
 			getters: {
-				b: function b(state) {
-					return state.notes;
+				list_type: function list_type(state) {
+					return state.list_type;
 				},
-				c: function c(state) {
-					return state.test;
+				list: function list(state) {
+					return state.list;
+				},
+				tips: function tips(state) {
+					return state.tips;
 				}
 			},
 			actions: {
-				addplus: _actions.addplus
+				get_list: _actions.get_list
 			}
 		},
 		components: {
-			Heade: _Heade2.default,
-			Foot: _Foot2.default,
-			selfInfo: _selfInfo2.default
+			Lists: _Lists2.default
+		},
+		ready: function ready() {
+			//alert(this.list_type)
+		},
+
+		computed: {
+			all: function all() {
+				if (this.list_type == 'all') {
+					return true;
+				} else {
+					return false;
+				}
+			},
+			good: function good() {
+				if (this.list_type == 'good') {
+					return true;
+				} else {
+					return false;
+				}
+			},
+			share: function share() {
+				if (this.list_type == 'share') {
+					return true;
+				} else {
+					return false;
+				}
+			},
+			ask: function ask() {
+				if (this.list_type == 'ask') {
+					return true;
+				} else {
+					return false;
+				}
+			},
+			job: function job() {
+				if (this.list_type == 'job') {
+					return true;
+				} else {
+					return false;
+				}
+			}
 		}
+
 	};
 
 	// </script>
 	// <style>
+	// .bg-danger{
+	// 	width: 96%;
+	// }
 	//
+	// </style>
+	// <template>
+	// 	<div class="lists">
+	// 		<div class="comdiv">
+	// 			<div class="comtit_">
+	// 				<a v-link="{name:'lists',params:{type_:'all',page_:1}}" href="javascript:;" thistype="all" v-bind:class="{'avtive':all}">全部</a>
+	// 				<a v-link="{name:'lists',params:{type_:'good',page_:1}}" href="javascript:;" thistype="good" v-bind:class="{'avtive':good}">精华</a>
+	// 				<a v-link="{name:'lists',params:{type_:'share',page_:1}}" href="javascript:;" thistype="share" v-bind:class="{'avtive':share}">分享</a>
+	// 				<a v-link="{name:'lists',params:{type_:'ask',page_:1}}" href="javascript:;" thistype="ask" v-bind:class="{'avtive':ask}">问答</a>
+	// 				<a v-link="{name:'lists',params:{type_:'job',page_:1}}" href="javascript:;" thistype="job" v-bind:class="{'avtive':job}">招聘</a>
+	// 			</div>
+	// 		</div>
+	// 		<div class="bg-danger" v-if="tips.show">{{tips.cont}}</div>
+	// 		<lists :pro="list" v-else></lists>	
+	//
+	// 	</div>
+	//
+	// </template>
+	// <script>
+
+/***/ },
+/* 69 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	var __vue_styles__ = {}
+	__webpack_require__(70)
+	__vue_script__ = __webpack_require__(72)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] components\\Lists.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(73)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
+	if (__vue_template__) {
+	__vue_options__.template = __vue_template__
+	}
+	if (!__vue_options__.computed) __vue_options__.computed = {}
+	Object.keys(__vue_styles__).forEach(function (key) {
+	var module = __vue_styles__[key]
+	__vue_options__.computed[key] = function () { return module }
+	})
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-27d215ae/Lists.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 70 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(71);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(9)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/vue-loader/lib/style-rewriter.js!./../node_modules/vue-loader/lib/selector.js?type=style&index=0!./Lists.vue", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/vue-loader/lib/style-rewriter.js!./../node_modules/vue-loader/lib/selector.js?type=style&index=0!./Lists.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 71 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(8)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.next{\n\twidth: 100%;\n\theight: 50px;\n\tbackground: #eee;\n\toverflow: hidden;\n}\n.next .sx{\n\twidth: 70px;\n\theight: 35px;\n\tline-height: 35px;\n\ttext-align: center;\n\tmargin: 10px 5px 5px;\n\tbackground: #ddd;\n\tcursor: pointer;\n\tborder-radius:3px;\n}\n.next .shang{\n\tfloat: left;\n}\n.next .xia{\n\tfloat: right;\n}\n.one_list{\n\tbackground: #fff;\n\theight: 50px;\n    padding: 10px 0 10px 10px;\n    font-size: 14px;\n    box-sizing: border-box;\n}\n.one_list:hover{\n\tbackground: #cdcdcd;\n}\n.one_list:after{\n\tcontent: '';\n\tclear: both;\n}\n.one_list img{\n\twidth: 30px;\n\theight: 30px;\n\tdisplay: inline-block;\n\tvertical-align: top;\n}\n.one_list .red_rep{\n\tdisplay: inline-block;\n\theight: 30px;\n\tline-height: 30px;\n\twidth: 70px;\n\tfont-size: 12px;\n\ttext-align: center;\n\n}\n.one_list .type_{\n\twidth: 32px;\n\theight: 18px;\n\tdisplay: inline-block;\n\tfont-size: 12px;\n\ttext-align: center;\n\tborder-radius: 2px;\n\tpadding-top: 1px;\n\tmargin-top: 6px;\n}\n.one_list .high_light{\n\tbackground: #80bd01;\n\tcolor: #fff;\n\n}\n.nomo_light{\n\tbackground: #e5e5e5;\n\tcolor: #999;\n}\n.one_list .nomonal{\n\tbackground: #999;\n\tcolor: #444;\n}\n.one_list .time_{\n\tfloat: right;\n\twidth: 67px;\n\ttext-align: right;\n\tmargin-right: 5px;\n\tline-height: 30px;\n\tcolor: #444;\n\n}\n.one_list .title_{\n\tmargin-right: 72px;\n\tmargin-left: 135px;\n\tline-height: 30px;\n\twhite-space: nowrap;\n\toverflow: hidden;\n\ttext-overflow:ellipsis;\n}\n.one_list .title_ a{\n\ttext-decoration:none;\n\tcolor: #444;\n}\n.comtit_{\n    height: 39px;\n    background: #f6f6f6;\n    padding: 0 10px;\n    font-size: 14px;\n}\n.lists .comtit_ a{\n\ttext-decoration: none;\n\tcolor: #80bd01;\n\tdisplay: inline-block;\n\twidth: 42px;\n\theight: 23px;\n\ttext-align: center;\n\tpadding: 3px;\n\tfont-size: 16px;\n\tmargin: 5px 10px 0 0;\n\tborder-radius: 3px;\n\tline-height: 23px;\n\tline-height: 16px;\n}\n.lists .comtit_ a.avtive{\n\tbackground: #80bd01;\n\tcolor: #fff;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 72 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _store = __webpack_require__(11);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _when = __webpack_require__(58);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// <template>
+	// 	<div class="one_list" v-for="item in pro">
+	// 		<img :src="item.author.avatar_url" alt="" class="fl">
+	// 		<span class="red_rep fl">{{item.reply_count}}/{{item.visit_count}}</span>
+	// 		<div class="type_ high_light fl" v-if="item.top">置顶</div>
+	// 		<div class="type_ high_light fl" v-else v-if="item.good">精华</div>
+	// 		<div class="type_ nomo_light fl" v-if="!item.top&&!item.good&&item.tab">{{item.tab | trans_type}}</div>
+	//
+	// 		<div class="time_">{{when_(item.create_at)}}</div>
+	// 		<div class="title_" v-link="{name:'details',params:{ixd:item.id}}"><a href="">{{item.title}}</a></div>
+	// 	</div>
+	// 	<div class="next">
+	// 		<div class="shang sx" v-if="shang_show" v-link="{name:'lists',params:{type_:list_type,page_:page_nub-1}}">上一页</div>
+	// 		<div class="xia sx" v-link="{name:'lists',params:{type_:list_type,page_:(parseInt(page_nub)+1)}}">下一页</div>
+	// 	</div>
+	// </template>
+	// <script>
+	exports.default = {
+		props: ['pro'],
+		methods: {
+			when_: _when.when
+		},
+		computed: {
+			shang_show: function shang_show() {
+				if (this.page_nub <= 1) {
+					return false;
+				} else {
+					return true;
+				}
+			}
+		},
+		vuex: {
+			getters: {
+				list_type: function list_type(state) {
+					return state.list_type;
+				},
+				page_nub: function page_nub(state) {
+					return state.page_nub;
+				}
+			}
+		}
+
+	};
+
+	// </script>
+	// <style>
+	// 	.next{
+	// 		width: 100%;
+	// 		height: 50px;
+	// 		background: #eee;
+	// 		overflow: hidden;
+	// 	}
+	// 	.next .sx{
+	// 		width: 70px;
+	// 		height: 35px;
+	// 		line-height: 35px;
+	// 		text-align: center;
+	// 		margin: 10px 5px 5px;
+	// 		background: #ddd;
+	// 		cursor: pointer;
+	// 		border-radius:3px;
+	// 	}
+	// 	.next .shang{
+	// 		float: left;
+	// 	}
+	// 	.next .xia{
+	// 		float: right;
+	// 	}
+	// 	.one_list{
+	// 		background: #fff;
+	// 		height: 50px;
+	// 	    padding: 10px 0 10px 10px;
+	// 	    font-size: 14px;
+	// 	    box-sizing: border-box;
+	// 	}
+	// 	.one_list:hover{
+	// 		background: #cdcdcd;
+	// 	}
+	// 	.one_list:after{
+	// 		content: '';
+	// 		clear: both;
+	// 	}
+	// 	.one_list img{
+	// 		width: 30px;
+	// 		height: 30px;
+	// 		display: inline-block;
+	// 		vertical-align: top;
+	// 	}
+	// 	.one_list .red_rep{
+	// 		display: inline-block;
+	// 		height: 30px;
+	// 		line-height: 30px;
+	// 		width: 70px;
+	// 		font-size: 12px;
+	// 		text-align: center;
+	//
+	// 	}
+	// 	.one_list .type_{
+	// 		width: 32px;
+	// 		height: 18px;
+	// 		display: inline-block;
+	// 		font-size: 12px;
+	// 		text-align: center;
+	// 		border-radius: 2px;
+	// 		padding-top: 1px;
+	// 		margin-top: 6px;
+	// 	}
+	// 	.one_list .high_light{
+	// 		background: #80bd01;
+	// 		color: #fff;
+	//
+	// 	}
+	// 	.nomo_light{
+	// 		background: #e5e5e5;
+	// 		color: #999;
+	// 	}
+	// 	.one_list .nomonal{
+	// 		background: #999;
+	// 		color: #444;
+	// 	}
+	// 	.one_list .time_{
+	// 		float: right;
+	// 		width: 67px;
+	// 		text-align: right;
+	// 		margin-right: 5px;
+	// 		line-height: 30px;
+	// 		color: #444;
+	//
+	// 	}
+	// 	.one_list .title_{
+	// 		margin-right: 72px;
+	// 		margin-left: 135px;
+	// 		line-height: 30px;
+	// 		white-space: nowrap;
+	// 		overflow: hidden;
+	// 		text-overflow:ellipsis;
+	// 	}
+	// 	.one_list .title_ a{
+	// 		text-decoration:none;
+	// 		color: #444;
+	// 	}
+	// 	.comtit_{
+	// 	    height: 39px;
+	// 	    background: #f6f6f6;
+	// 	    padding: 0 10px;
+	// 	    font-size: 14px;
+	// 	}
+	// 	.lists .comtit_ a{
+	// 		text-decoration: none;
+	// 		color: #80bd01;
+	// 		display: inline-block;
+	// 		width: 42px;
+	// 		height: 23px;
+	// 		text-align: center;
+	// 		padding: 3px;
+	// 		font-size: 16px;
+	// 		margin: 5px 10px 0 0;
+	// 		border-radius: 3px;
+	// 		line-height: 23px;
+	// 		line-height: 16px;
+	// 	}
+	// 	.lists .comtit_ a.avtive{
+	// 		background: #80bd01;
+	// 		color: #fff;
+	// 	}
 	// </style>
 
 /***/ },
-/* 50 */
+/* 73 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n1\n";
+	module.exports = "\n<div class=\"one_list\" v-for=\"item in pro\">\n\t<img :src=\"item.author.avatar_url\" alt=\"\" class=\"fl\">\n\t<span class=\"red_rep fl\">{{item.reply_count}}/{{item.visit_count}}</span>\n\t<div class=\"type_ high_light fl\" v-if=\"item.top\">置顶</div>\n\t<div class=\"type_ high_light fl\" v-else v-if=\"item.good\">精华</div>\n\t<div class=\"type_ nomo_light fl\" v-if=\"!item.top&&!item.good&&item.tab\">{{item.tab | trans_type}}</div>\n\n\t<div class=\"time_\">{{when_(item.create_at)}}</div>\n\t<div class=\"title_\" v-link=\"{name:'details',params:{ixd:item.id}}\"><a href=\"\">{{item.title}}</a></div>\n</div>\n<div class=\"next\">\n\t<div class=\"shang sx\" v-if=\"shang_show\" v-link=\"{name:'lists',params:{type_:list_type,page_:page_nub-1}}\">上一页</div>\n\t<div class=\"xia sx\" v-link=\"{name:'lists',params:{type_:list_type,page_:(parseInt(page_nub)+1)}}\">下一页</div>\n</div>\n";
+
+/***/ },
+/* 74 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"lists\">\n\t<div class=\"comdiv\">\n\t\t<div class=\"comtit_\">\n\t\t\t<a v-link=\"{name:'lists',params:{type_:'all',page_:1}}\" href=\"javascript:;\" thistype=\"all\" v-bind:class=\"{'avtive':all}\">全部</a>\n\t\t\t<a v-link=\"{name:'lists',params:{type_:'good',page_:1}}\" href=\"javascript:;\" thistype=\"good\" v-bind:class=\"{'avtive':good}\">精华</a>\n\t\t\t<a v-link=\"{name:'lists',params:{type_:'share',page_:1}}\" href=\"javascript:;\" thistype=\"share\" v-bind:class=\"{'avtive':share}\">分享</a>\n\t\t\t<a v-link=\"{name:'lists',params:{type_:'ask',page_:1}}\" href=\"javascript:;\" thistype=\"ask\" v-bind:class=\"{'avtive':ask}\">问答</a>\n\t\t\t<a v-link=\"{name:'lists',params:{type_:'job',page_:1}}\" href=\"javascript:;\" thistype=\"job\" v-bind:class=\"{'avtive':job}\">招聘</a>\n\t\t</div>\n\t</div>\n\t<div class=\"bg-danger\" v-if=\"tips.show\">{{tips.cont}}</div>\n\t<lists :pro=\"list\" v-else></lists>\t\n\n</div>\n\n";
+
+/***/ },
+/* 75 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	var __vue_styles__ = {}
+	__webpack_require__(76)
+	__vue_script__ = __webpack_require__(78)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] components\\Details.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(79)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
+	if (__vue_template__) {
+	__vue_options__.template = __vue_template__
+	}
+	if (!__vue_options__.computed) __vue_options__.computed = {}
+	Object.keys(__vue_styles__).forEach(function (key) {
+	var module = __vue_styles__[key]
+	__vue_options__.computed[key] = function () { return module }
+	})
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-3a6a099b/Details.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 76 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(77);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(9)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/vue-loader/lib/style-rewriter.js!./../node_modules/vue-loader/lib/selector.js?type=style&index=0!./Details.vue", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/vue-loader/lib/style-rewriter.js!./../node_modules/vue-loader/lib/selector.js?type=style&index=0!./Details.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 77 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(8)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 78 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _actions = __webpack_require__(32);
+
+	exports.default = {
+		vuex: {
+			getters: {
+				article: function article(state) {
+					return state.article;
+				}
+			},
+			actions: {
+				load_inner: _actions.load_inner
+			}
+		},
+		methods: {},
+		route: {
+			data: function data(transition) {
+				var ixd_ = this.$route.params.ixd;
+				//console.log(123,this.$route.params.ixd)
+				this.load_inner(ixd_);
+			}
+		}
+	}; // <template>
+	// 	<div class="lists">
+	// 		{{{article.content}}}
+	// 	</div>
+	// </template>
+	// <script>
+
+/***/ },
+/* 79 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"lists\">\n\t{{{article.content}}}\n</div>\n";
 
 /***/ }
 /******/ ]);
