@@ -12,8 +12,8 @@
 					<li><a href="javascript:;" @click="signOut">退出</a></li>
 				</ul>
 				<ul v-else>
-					<li><a v-link="{ path: '/'}">首页</a></li>
-					<li><a v-link="{ path: '/login'}">登录</a></li>
+					<li class="wap_"><a v-link="{ path: '/'}">首页</a></li>
+					<li class="wap_"><a v-link="{ path: '/login'}">登录</a></li>
 				</ul>
 			</nav>
 			</div>

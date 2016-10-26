@@ -13,28 +13,19 @@ const state = {
   noread_num:0,//未读消息数量
   msg:'',//消息内容
 
-  notes: [1,2],
-  test: 1,
-  activeNote: {}
+  list:'',//首页文章列表
+  page_nub:1,//文章页码
+  list_type:'all',//文章类型
+  article:'',//详情页内容
+
+  tips:{
+    show:false,
+    cont:'加载中...'
+  }
 }
 
 const mutations = {
-  EDIT_NOTE (state, text) {
-    state.activeNote.text = text
-  },
 
-  DELETE_NOTE (state) {
-    state.notes.$remove(state.activeNote)
-    state.activeNote = state.notes[0]
-  },
-
-  SET_ACTIVE_NOTE (state, note) {
-    state.activeNote = note
-  },
-
-  CHEACK_TOKEN (state,id) {
-    alert(id+'asd')
-  },
   //检测token成功设置
   TOKEN_SUC (state,user,token) {
     state.user=user;
@@ -69,6 +60,33 @@ const mutations = {
   //设置消息内容
   SET_USER_MESSAGES(state,msg){
     state.msg=msg;
+  },
+  //文章类型改变
+  TYPE_CHANGE(state,type){
+    if(state.list_type!==type){
+        state.list_type=type;
+        state.page_nub=1;
+        //alert(state.page_nub)
+    }
+  },
+  //设置获取到的文章列表
+  GET_LIST_SUC(state,data,ty,pa){
+    state.list=data;
+    state.tips.show=false;
+    state.list_type=ty;
+    state.page_nub=pa;
+    //alert('asd'+state.page_nub)
+    //console.log(pa)
+
+  },
+  //显示加载中提示
+  LOAD(state){
+    state.tips.show=true;
+  },
+  //添加文章详情
+  LOAD_INNER(state,inner){
+    state.article=inner;
+    //console.log(123,inner.content)
   },
 }
 

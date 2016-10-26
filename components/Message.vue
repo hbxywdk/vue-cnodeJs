@@ -68,6 +68,9 @@ export default{
 		display: block;
 		margin-left: 35px;
 		margin-right: 80px;
+	    overflow: hidden;
+    	text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 	.yhf_and_ohf>li{
 		height: 50px;

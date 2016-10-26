@@ -97,6 +97,9 @@ li{list-style:none;}
 		font-size: 13px;
 		text-align:center;
 	}
+	.wap_{
+		width:50%!important;
+	}
 }
 /* 内容 */
 .main{

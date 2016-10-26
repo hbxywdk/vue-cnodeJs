@@ -15537,7 +15537,7 @@
 
 
 	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* 修改bt样式 */\r\n.bg-danger{\r\n\tpadding: 9px;\r\n\tfont-size: 18px;\r\n\twidth: 50%;\r\n\tmargin: 30px auto;\r\n\tfont-size: 18px;\r\n\tdisplay: block;\r\n\ttext-align: center;\r\n\tborder-radius: 3px;\r\n\tcolor: #666;\r\n}\r\n.form-control{\r\n\twidth: 50%;\r\n\tmargin: 30px  auto;\r\n\tfont-size: 18px;\r\n}\r\n.btn{\r\n\twidth: 50%;\r\n\tmargin: 0 auto;\r\n\tfont-size: 18px;\r\n\tborder-radius: 3px;\r\n\tdisplay: block;\r\n\r\n}\r\n", ""]);
 
 	// exports
 
@@ -15561,7 +15561,11 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// <template>
-	// 1
+	// 	<div class="lists">
+	// 		<input type="text" maxlength="40" v-model="myToken" class="form-control">	
+	// 		<a href="javascript:;" class="btn btn-primary" @click.prevent.stop="subToken">登录</a>
+	// 		<p class="bg-danger" v-if="token_err">Token错误</p>
+	// 	</div>
 	// </template>
 	// <script>
 	exports.default = {
@@ -15581,20 +15585,53 @@
 				cheackToken: _actions.cheackToken
 			}
 		},
-		methods: {}
+		methods: {
+			subToken: function subToken() {
+				var _this = this;
+
+				this.cheackToken(this.myToken).then(function (bl) {
+					if (bl) {
+						_this.$route.router.go({ path: '/' });
+					}
+				});
+			}
+		}
 
 	};
-
 	// </script>
 	// <style>
+	// /* 修改bt样式 */
+	// .bg-danger{
+	// 	padding: 9px;
+	// 	font-size: 18px;
+	// 	width: 50%;
+	// 	margin: 30px auto;
+	// 	font-size: 18px;
+	// 	display: block;
+	// 	text-align: center;
+	// 	border-radius: 3px;
+	// 	color: #666;
+	// }
+	// .form-control{
+	// 	width: 50%;
+	// 	margin: 30px  auto;
+	// 	font-size: 18px;
+	// }
+	// .btn{
+	// 	width: 50%;
+	// 	margin: 0 auto;
+	// 	font-size: 18px;
+	// 	border-radius: 3px;
+	// 	display: block;
 	//
+	// }
 	// </style>
 
 /***/ },
 /* 28 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n1\r\n";
+	module.exports = "\n<div class=\"lists\">\n\t<input type=\"text\" maxlength=\"40\" v-model=\"myToken\" class=\"form-control\">\t\n\t<a href=\"javascript:;\" class=\"btn btn-primary\" @click.prevent.stop=\"subToken\">登录</a>\n\t<p class=\"bg-danger\" v-if=\"token_err\">Token错误</p>\n</div>\n";
 
 /***/ },
 /* 29 */
@@ -16304,7 +16341,7 @@
 
 
 	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.red{\n\tfont-size:20px;\n\tcolor:red;\n}\n", ""]);
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 	// exports
 
@@ -16345,15 +16382,7 @@
 
 	// <template>
 	//
-	// 	<heade></heade>
-	//
-	//     <section class="main">
-	// 		<self-info></self-info>
-	// 		<router-view></router-view>
-	//     </section>
-	//
-	//     <foot></foot>
-	//
+	//     1
 	// </template>
 	// <script>
 	exports.default = {
@@ -16386,17 +16415,14 @@
 
 	// </script>
 	// <style>
-	// 	.red{
-	// 		font-size:20px;
-	// 		color:red;
-	// 	}
+	//
 	// </style>
 
 /***/ },
 /* 50 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\t<heade></heade>\n\n    <section class=\"main\">\n\t\t<self-info></self-info>\n\t\t<router-view></router-view>\n    </section>\n\n    <foot></foot>\n    \n";
+	module.exports = "\n\n1\n";
 
 /***/ }
 /******/ ]);

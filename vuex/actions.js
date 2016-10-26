@@ -28,7 +28,6 @@ const get_=(url,options)=>{
 			      if (response.status >= 200 && response.status < 300) {
 			      		return response.json();
 			      }
-		   		
 		    });
 }
 //获取具体文章内容
@@ -129,6 +128,36 @@ export const all_read=({dispatch},token)=>{
 			});
 }
 
-export const ddd=({dispatch})=>{
+/*export const type_change=({dispatch},e)=>{
+	let type_=e.target.getAttribute('thistype');
+	dispatch('TYPE_CHANGE',type_);
+}*/
+export const get_list=({dispatch},type,page)=>{
+	//alert(type+"+"+page)
+	dispatch('TYPE_CHANGE',type);
+	dispatch('LOAD');
+	get_('https://cnodejs.org/api/v1/topics?limit=20&tab='+type+'&page='+page)
+	.then(function(data){
+		//console.log(1,data.data)
+		if (data.success) {
+			dispatch('GET_LIST_SUC',data.data,type,page);
+		}
+	});
+
+}
+
+export const load_inner=({dispatch},ixd)=>{
+	if (ixd) {
+		get_('https://cnodejs.org/api/v1/topic/'+ixd)
+		.then(function(data){
+			//console.log(1,data.data)
+			if (data.success) {
+				//console.log("wdk",data.data)
+				dispatch('LOAD_INNER',data.data)
+			}
+		});
+	}
+}
+export const aaa=({dispatch})=>{
 
 }
