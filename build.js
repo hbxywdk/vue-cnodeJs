@@ -13972,7 +13972,7 @@
 
 
 	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.red{\n\tfont-size:20px;\n\tcolor:red;\n}\n", ""]);
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 	// exports
 
@@ -14332,10 +14332,7 @@
 
 	// </script>
 	// <style>
-	// 	.red{
-	// 		font-size:20px;
-	// 		color:red;
-	// 	}
+	//
 	// </style>
 
 /***/ },
@@ -15557,14 +15554,28 @@
 			get_('https://cnodejs.org/api/v1/topic/' + ixd).then(function (data) {
 				//console.log(1,data.data)
 				if (data.success) {
-					//console.log("wdk",data.data)
+					console.log("wdk", data.data);
 					dispatch('LOAD_INNER', data.data);
 				}
 			});
 		}
 	};
-	var aaa = exports.aaa = function aaa(_ref9) {
+	var zan = exports.zan = function zan(_ref9, idyo, myid) {
 		var dispatch = _ref9.dispatch;
+
+		//let idyo=e.target.getAttribute('idyo');
+		alert('https://cnodejs.org/api/v1/reply/' + idyo + '/ups');
+		alert('accesstoken=' + myid);
+		post_('https://cnodejs.org/api/v1/reply/' + idyo + '/ups', 'accesstoken=' + myid).then(function (data) {
+			if (data.success) {
+				alert('成功');
+			}
+		}).catch(function () {
+			alert('失败');
+		});
+	};
+	var aaa = exports.aaa = function aaa(_ref10) {
+		var dispatch = _ref10.dispatch;
 	};
 
 /***/ },
@@ -16374,7 +16385,7 @@
 	// 			<li v-for="item in user_rep.recent_topics">
 	// 				<span class="fl"><img :src="item.author.avatar_url" alt="{{item.author.loginname}}" title="{{item.author.loginname}}"></span>
 	// 				<span class="fr e5">{{ when_(item.last_reply_at) }}</span>
-	// 				<span :thisid="item.id" class="text_content">{{item.title}}</span>
+	// 				<span :thisid="item.id" class="text_content" v-link="{name:'details',params:{ixd:item.id}}">{{item.title}}</span>
 	// 			</li>
 	// 		</ul>
 	// 		<div class="_title_">最近参与的话题</div>
@@ -16382,7 +16393,7 @@
 	// 			<li v-for="item in user_rep.recent_replies">
 	// 				<span class="fl"><img :src="item.author.avatar_url" alt="{{item.author.loginname}}" title="{{item.author.loginname}}"></span>
 	// 				<span class="fr e5">{{ when_( item.last_reply_at) }}</span>
-	// 				<span :thisid="item.id" class="text_content">{{item.title}}</span>
+	// 				<span :thisid="item.id" class="text_content" v-link="{name:'details',params:{ixd:item.id}}">{{item.title}}</span>
 	// 			</li>
 	// 		</ul>
 	// 	</div>
@@ -16442,7 +16453,7 @@
 /* 59 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"lists\" style=\"background: #e1e1e1\">\n\t<div class=\"selfinfo\">\n\t\t<a href=\"javascript:;\" v-link=\"{ path: '/my'}\">\n\t\t\t<img :src=user.avatar_url alt=\"\">\n\t\t</a>\n\t\t<span>{{user.loginname}}</span>\n\t\t<p>积分：{{user_rep.score}}</p>\n\t\t<p class=\"e5\">github：{{user_rep.githubUsername}}</p>\n\t\t<p>注册于{{ when_(user_rep.create_at) }}</p>\n\t</div>\n\t<div class=\"_title_\">最近创建的话题</div>\n\t<ul class=\"yhf_and_ohf\">\n\t\t<li v-for=\"item in user_rep.recent_topics\">\n\t\t\t<span class=\"fl\"><img :src=\"item.author.avatar_url\" alt=\"{{item.author.loginname}}\" title=\"{{item.author.loginname}}\"></span>\n\t\t\t<span class=\"fr e5\">{{ when_(item.last_reply_at) }}</span>\n\t\t\t<span :thisid=\"item.id\" class=\"text_content\">{{item.title}}</span>\n\t\t</li>\n\t</ul>\n\t<div class=\"_title_\">最近参与的话题</div>\n\t<ul class=\"yhf_and_ohf\">\n\t\t<li v-for=\"item in user_rep.recent_replies\">\n\t\t\t<span class=\"fl\"><img :src=\"item.author.avatar_url\" alt=\"{{item.author.loginname}}\" title=\"{{item.author.loginname}}\"></span>\n\t\t\t<span class=\"fr e5\">{{ when_( item.last_reply_at) }}</span>\n\t\t\t<span :thisid=\"item.id\" class=\"text_content\">{{item.title}}</span>\n\t\t</li>\n\t</ul>\n</div>\n\n";
+	module.exports = "\n<div class=\"lists\" style=\"background: #e1e1e1\">\n\t<div class=\"selfinfo\">\n\t\t<a href=\"javascript:;\" v-link=\"{ path: '/my'}\">\n\t\t\t<img :src=user.avatar_url alt=\"\">\n\t\t</a>\n\t\t<span>{{user.loginname}}</span>\n\t\t<p>积分：{{user_rep.score}}</p>\n\t\t<p class=\"e5\">github：{{user_rep.githubUsername}}</p>\n\t\t<p>注册于{{ when_(user_rep.create_at) }}</p>\n\t</div>\n\t<div class=\"_title_\">最近创建的话题</div>\n\t<ul class=\"yhf_and_ohf\">\n\t\t<li v-for=\"item in user_rep.recent_topics\">\n\t\t\t<span class=\"fl\"><img :src=\"item.author.avatar_url\" alt=\"{{item.author.loginname}}\" title=\"{{item.author.loginname}}\"></span>\n\t\t\t<span class=\"fr e5\">{{ when_(item.last_reply_at) }}</span>\n\t\t\t<span :thisid=\"item.id\" class=\"text_content\" v-link=\"{name:'details',params:{ixd:item.id}}\">{{item.title}}</span>\n\t\t</li>\n\t</ul>\n\t<div class=\"_title_\">最近参与的话题</div>\n\t<ul class=\"yhf_and_ohf\">\n\t\t<li v-for=\"item in user_rep.recent_replies\">\n\t\t\t<span class=\"fl\"><img :src=\"item.author.avatar_url\" alt=\"{{item.author.loginname}}\" title=\"{{item.author.loginname}}\"></span>\n\t\t\t<span class=\"fr e5\">{{ when_( item.last_reply_at) }}</span>\n\t\t\t<span :thisid=\"item.id\" class=\"text_content\" v-link=\"{name:'details',params:{ixd:item.id}}\">{{item.title}}</span>\n\t\t</li>\n\t</ul>\n</div>\n\n";
 
 /***/ },
 /* 60 */
@@ -17129,12 +17140,12 @@
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
 	__webpack_require__(76)
-	__vue_script__ = __webpack_require__(78)
+	__vue_script__ = __webpack_require__(80)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] components\\Details.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(79)
+	__vue_template__ = __webpack_require__(81)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -17193,13 +17204,25 @@
 
 
 	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.lists{\n\tpadding: 2%;\n}\n.lists img{\n\tmax-width:100%;\n}\n.inner_top .pic_title{\n\tline-height: 40px;\n\toverflow: hidden;\n}\n.inner_top .pic_title>img{\n\twidth: 40px;\n\theight: 40px;\n\tborder-radius: 50%;\n\tdisplay: inline-block;\n\tvertical-align: middle;\n}\n.inner_top .pic_title>h2{\n\tdisplay: inline;\n\tline-height: 40px;\n\tvertical-align: middle;\n\tfont-size: 25px;\n\tword-break: break-all;\n}\n.inner_top .arc_info{\n\tpadding-left: 40px;\n}\n@media screen and (max-width: 640px){\n\t.inner_top .arc_info{\n\t\tpadding-left: 0px;\n\t\ttext-align: center;\n\t}\n}\n.inner_reply ul li{\n\tmargin-bottom: 20px;\n}\n.inner_reply ul li .reply_title>img{\n\twidth: 30px;\n\theight: 30px;\n}\n.au_name{\n\tfont-weight: 700;\n}\n.mt10{\n\tmargin-top: 10px;\n}\n.had_zan{\n\t\n\twidth: 13px;\n\theight: 15px;\n\tdisplay: inline-block;\n\tbackground-size: 13px 15px;\n\tbackground: url(" + __webpack_require__(78) + ") no-repeat center;\n}\n.no_zan{\n\t\n\twidth: 13px;\n\theight: 15px;\n\tdisplay: inline-block;\n\tbackground-size: 13px 15px;\n\tbackground: url(" + __webpack_require__(79) + ") no-repeat center;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
 /* 78 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "img/1.min.png"
+
+/***/ },
+/* 79 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "img/2.min.png"
+
+/***/ },
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17210,37 +17233,93 @@
 
 	var _actions = __webpack_require__(32);
 
+	var _when = __webpack_require__(58);
+
+	// <template>
+	// 	<div class="lists">
+	// 		<div class="inner_top">
+	// 			<div class="pic_title">
+	// 				<img :src="article.author.avatar_url" :alt="article.author.loginname"><h2>{{article.title}}</h2>
+	// 			</div>
+	// 			<p class="arc_info">
+	// 				作者：<span>{{article.author.loginname}}</span>
+	// 				发布于：<span>{{ when_(article.create_at) }}</span>
+	// 				回复：<span>{{article.reply_count}}</span>
+	// 				浏览：<span>{{article.visit_count}}</span>
+	// 			</p>
+	// 		</div>
+	// 		<div>
+	// 			{{{article.content}}}
+	// 		</div>
+	// 		<div class="inner_reply">
+	// 			<h3>回复</h3>
+	// 			<ul>
+	// 				<li v-for="item in article.replies">
+	// 					<div class="reply_title">
+	// 						<img :src="item.author.avatar_url" :alt="item.author.loginname"><span class="au_name"> {{item.author.loginname}} </span>{{$index+1}}楼 {{ when_(item.create_at) }}
+	// 						<span class="fr">
+	//
+	// 						<span :idyo="item.id" @click="zan_t" class="{ 'had_zan':return_f_t(user.id,item.ups),'no_zan':return_f_t(user.id,item.ups)}">1</span>
+	// 						{{item.ups.length}}
+	// 						</span>
+	// 						<div class="mt10">
+	// 							{{{item.content}}}
+	// 						</div>
+	// 					</div>
+	// 				</li>
+	// 			</ul>
+	// 		</div>
+	// 	</div>
+	// </template>
+	// <script>
 	exports.default = {
 		vuex: {
 			getters: {
 				article: function article(state) {
 					return state.article;
+				},
+				user: function user(state) {
+					return state.user;
+				},
+				accesstoken: function accesstoken(state) {
+					return state.accesstoken;
 				}
 			},
 			actions: {
-				load_inner: _actions.load_inner
+				load_inner: _actions.load_inner,
+				zan: _actions.zan
 			}
 		},
-		methods: {},
+		methods: {
+			when_: _when.when,
+			return_f_t: function return_f_t(id, ups) {
+				alert();
+				for (i in ups) {
+					if (ups[i] == id) {
+						return true;
+					} else {
+						return false;
+					}
+				}
+			},
+			zan_t: function zan_t(e) {
+				var idyo = e.target.getAttribute('idyo');
+				this.zan(idyo, this.accesstoken);
+			}
+		},
 		route: {
 			data: function data(transition) {
 				var ixd_ = this.$route.params.ixd;
-				//console.log(123,this.$route.params.ixd)
 				this.load_inner(ixd_);
 			}
 		}
-	}; // <template>
-	// 	<div class="lists">
-	// 		{{{article.content}}}
-	// 	</div>
-	// </template>
-	// <script>
+	};
 
 /***/ },
-/* 79 */
+/* 81 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"lists\">\n\t{{{article.content}}}\n</div>\n";
+	module.exports = "\n<div class=\"lists\">\n\t<div class=\"inner_top\">\n\t\t<div class=\"pic_title\">\n\t\t\t<img :src=\"article.author.avatar_url\" :alt=\"article.author.loginname\"><h2>{{article.title}}</h2>\n\t\t</div>\n\t\t<p class=\"arc_info\">\n\t\t\t作者：<span>{{article.author.loginname}}</span>\n\t\t\t发布于：<span>{{ when_(article.create_at) }}</span>\n\t\t\t回复：<span>{{article.reply_count}}</span>\n\t\t\t浏览：<span>{{article.visit_count}}</span>\n\t\t</p>\n\t</div>\n\t<div>\n\t\t{{{article.content}}}\n\t</div>\n\t<div class=\"inner_reply\">\n\t\t<h3>回复</h3>\n\t\t<ul>\n\t\t\t<li v-for=\"item in article.replies\">\n\t\t\t\t<div class=\"reply_title\">\n\t\t\t\t\t<img :src=\"item.author.avatar_url\" :alt=\"item.author.loginname\"><span class=\"au_name\"> {{item.author.loginname}} </span>{{$index+1}}楼 {{ when_(item.create_at) }}\n\t\t\t\t\t<span class=\"fr\">\n\t\t\t\t\t\t\n\t\t\t\t\t<span :idyo=\"item.id\" @click=\"zan_t\" class=\"{ 'had_zan':return_f_t(user.id,item.ups),'no_zan':return_f_t(user.id,item.ups)}\">1</span>\n\t\t\t\t\t{{item.ups.length}}\n\t\t\t\t\t</span>\n\t\t\t\t\t<div class=\"mt10\">\n\t\t\t\t\t\t{{{item.content}}}\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</li>\n\t\t</ul>\n\t</div>\n</div>\n";
 
 /***/ }
 /******/ ]);

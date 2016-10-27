@@ -22,6 +22,14 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel',
         exclude: /node_modules/
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        loader: 'file-loader',
+        query: {
+          limit: 10000,
+          name: 'img/[name].min.[ext]'
+        }
       }
     ]
   },

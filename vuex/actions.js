@@ -152,11 +152,25 @@ export const load_inner=({dispatch},ixd)=>{
 		.then(function(data){
 			//console.log(1,data.data)
 			if (data.success) {
-				//console.log("wdk",data.data)
+				console.log("wdk",data.data)
 				dispatch('LOAD_INNER',data.data)
 			}
 		});
 	}
+}
+export const zan=({dispatch},idyo,myid)=>{
+	//let idyo=e.target.getAttribute('idyo');
+	alert(`https://cnodejs.org/api/v1/reply/${idyo}/ups`)
+	alert(`accesstoken=${myid}`)
+	post_(`https://cnodejs.org/api/v1/reply/${idyo}/ups`,`accesstoken=${myid}`)
+		.then(function(data){
+			if (data.success) {
+				alert('成功');
+			}
+		})
+		.catch(function(){
+			alert('失败');
+		});
 }
 export const aaa=({dispatch})=>{
 

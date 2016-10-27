@@ -43,8 +43,5 @@ export default{
 
 </script>
 <style>
-	.red{
-		font-size:20px;
-		color:red;
-	}
+
 </style>

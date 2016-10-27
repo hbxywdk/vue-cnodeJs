@@ -14,7 +14,7 @@
 			<li v-for="item in user_rep.recent_topics">
 				<span class="fl"><img :src="item.author.avatar_url" alt="{{item.author.loginname}}" title="{{item.author.loginname}}"></span>
 				<span class="fr e5">{{ when_(item.last_reply_at) }}</span>
-				<span :thisid="item.id" class="text_content">{{item.title}}</span>
+				<span :thisid="item.id" class="text_content" v-link="{name:'details',params:{ixd:item.id}}">{{item.title}}</span>
 			</li>
 		</ul>
 		<div class="_title_">最近参与的话题</div>
@@ -22,7 +22,7 @@
 			<li v-for="item in user_rep.recent_replies">
 				<span class="fl"><img :src="item.author.avatar_url" alt="{{item.author.loginname}}" title="{{item.author.loginname}}"></span>
 				<span class="fr e5">{{ when_( item.last_reply_at) }}</span>
-				<span :thisid="item.id" class="text_content">{{item.title}}</span>
+				<span :thisid="item.id" class="text_content" v-link="{name:'details',params:{ixd:item.id}}">{{item.title}}</span>
 			</li>
 		</ul>
 	</div>
