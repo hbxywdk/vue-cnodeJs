@@ -9,7 +9,7 @@
 					<li><a v-link="{ path: '/'}">首页</a></li>
 					<li class="noread_msg"><a v-link="{ path: '/message'}">消息<div class="noread_num" v-if="noread_num>0"></div></a></li>
 					<li><a v-link="{ path: '/my'}">{{user.loginname}}</a></li>
-					<li><a href="javascript:;" @click="signOut">退出</a></li>
+					<li><a href="javascript:;" @click="sign_out">退出</a></li>
 				</ul>
 				<ul v-else>
 					<li class="wap_"><a v-link="{ path: '/'}">首页</a></li>
@@ -28,9 +28,10 @@ export default{
 		}
 	},
 	methods:{
-/*		sign_out(){
+		sign_out(){
 			this.signOut();
-		}*/
+			this.$route.router.go({path:'/'});
+		}
 	},
 	vuex:{
 		getters:{

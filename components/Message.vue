@@ -8,7 +8,7 @@
 					&nbsp;
 					<span class="bule_">{{item.author.loginname}}</span>&nbsp;回复了你的话题&nbsp;
 				</span>
-				<span :thisid="item.id" class="text_content bule_">{{item.topic.title}}</span>
+				<span :thisid="item.id" class="text_content bule_" v-link="{name:'details',params:{ixd:item.topic.id}}">{{item.topic.title}}</span>
 			</li>
 		</ul>
 		<div class="_title_">已读消息</div>
@@ -19,11 +19,12 @@
 					&nbsp;
 					<span class="bule_">{{item.author.loginname}}</span>&nbsp;回复了你的话题&nbsp;
 				</span>
-				<span :thisid="item.id" class="text_content bule_">{{item.topic.title}}</span>
+				<span :thisid="item.id" class="text_content bule_" v-link="{name:'details',params:{ixd:item.topic.id}}" >{{item.topic.title}}</span>
 			</li>
 		</ul>
+		<div @click="all_read_x" class="all_read_c">全部标记为已读</div>	
 	</div>
-	<div @click="all_read_x" class="all_read_c">全部标记为已读</div>	
+	
 </template>
 <script>
 import { all_read } from '../vuex/actions.js'
@@ -31,7 +32,6 @@ import { all_read } from '../vuex/actions.js'
 export default{
 	vuex: {
 	  getters: {
-
 	    accesstoken: state=>state.accesstoken,
 	    msg: state=>state.msg
 	  },

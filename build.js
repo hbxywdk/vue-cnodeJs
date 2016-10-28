@@ -15554,28 +15554,72 @@
 			get_('https://cnodejs.org/api/v1/topic/' + ixd).then(function (data) {
 				//console.log(1,data.data)
 				if (data.success) {
-					console.log("wdk", data.data);
+					//console.log("wdk",data.data)
 					dispatch('LOAD_INNER', data.data);
 				}
 			});
 		}
 	};
-	var zan = exports.zan = function zan(_ref9, idyo, myid) {
+	var zan = exports.zan = function zan(_ref9, idyo, myid, x) {
 		var dispatch = _ref9.dispatch;
 
-		//let idyo=e.target.getAttribute('idyo');
-		alert('https://cnodejs.org/api/v1/reply/' + idyo + '/ups');
-		alert('accesstoken=' + myid);
+		//alert(x);
 		post_('https://cnodejs.org/api/v1/reply/' + idyo + '/ups', 'accesstoken=' + myid).then(function (data) {
 			if (data.success) {
 				alert('成功');
+				get_('https://cnodejs.org/api/v1/topic/' + x).then(function (data) {
+					//console.log(1,data.data)
+					if (data.success) {
+						//console.log("wdk",data.data)
+						dispatch('LOAD_INNER', data.data);
+					}
+				});
 			}
 		}).catch(function () {
 			alert('失败');
 		});
 	};
-	var aaa = exports.aaa = function aaa(_ref10) {
+
+	var replay_topic = exports.replay_topic = function replay_topic(_ref10, topic_id, token, text, someone) {
 		var dispatch = _ref10.dispatch;
+
+		if (someone !== '') {
+			post_('https://cnodejs.org/api/v1/topic/' + topic_id + '/replies', 'accesstoken=' + token + '&content=' + text + '&reply_id=' + someone).then(function (data) {
+				if (data.success) {
+					alert('成功');
+					get_('https://cnodejs.org/api/v1/topic/' + topic_id).then(function (data) {
+						//console.log(1,data.data)
+						if (data.success) {
+							//console.log("wdk",data.data)
+							dispatch('LOAD_INNER', data.data);
+						}
+					});
+				}
+			}).catch(function () {
+				alert('失败');
+			});
+		} else {
+			post_('https://cnodejs.org/api/v1/topic/' + topic_id + '/replies', 'accesstoken=' + token + '&content=' + text).then(function (data) {
+				if (data.success) {
+					alert('成功');
+					get_('https://cnodejs.org/api/v1/topic/' + topic_id).then(function (data) {
+						//console.log(1,data.data)
+						if (data.success) {
+							//console.log("wdk",data.data)
+							dispatch('LOAD_INNER', data.data);
+						}
+					});
+				}
+			}).catch(function () {
+				alert('失败');
+			});
+		}
+	};
+	var qwee = exports.qwee = function qwee(_ref11) {
+		var dispatch = _ref11.dispatch;
+	};
+	var sadfas = exports.sadfas = function sadfas(_ref12) {
+		var dispatch = _ref12.dispatch;
 	};
 
 /***/ },
@@ -15649,7 +15693,7 @@
 
 
 	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nnav li{\n\tmargin-top: 5px;\n}\n.noread_msg{\n\tposition: relative;\n}\n.noread_msg .noread_num{\n\twidth: 5px;\n\tbackground: red;\n\theight: 5px;\n\tborder-radius: 50%;\n\tposition: absolute;\n\ttop: 5px;\n\tright: 5px;\n}\n", ""]);
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nnav li{\n\tmargin-top: 5px;\n}\n.noread_msg{\n\tposition: relative;\n}\n.noread_msg .noread_num{\n\twidth: 5px;\n\tbackground: red;\n\theight: 5px;\n\tborder-radius: 50%;\n\tposition: absolute;\n\ttop: 5px;\n\tright: 5px;\n}\n", ""]);
 
 	// exports
 
@@ -15674,9 +15718,10 @@
 		},
 
 		methods: {
-			/*		sign_out(){
-	  			this.signOut();
-	  		}*/
+			sign_out: function sign_out() {
+				this.signOut();
+				this.$route.router.go({ path: '/' });
+			}
 		},
 		vuex: {
 			getters: {
@@ -15726,7 +15771,7 @@
 	// 					<li><a v-link="{ path: '/'}">首页</a></li>
 	// 					<li class="noread_msg"><a v-link="{ path: '/message'}">消息<div class="noread_num" v-if="noread_num>0"></div></a></li>
 	// 					<li><a v-link="{ path: '/my'}">{{user.loginname}}</a></li>
-	// 					<li><a href="javascript:;" @click="signOut">退出</a></li>
+	// 					<li><a href="javascript:;" @click="sign_out">退出</a></li>
 	// 				</ul>
 	// 				<ul v-else>
 	// 					<li class="wap_"><a v-link="{ path: '/'}">首页</a></li>
@@ -15742,7 +15787,7 @@
 /* 37 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<header class=\"head\">\n\t<div class=\"header_box\">\n\t<a v-link=\"{ path: '/'}\">\n\t\t<img src=\"https://o4j806krb.qnssl.com/public/images/cnodejs_light.svg\" alt=\"\" id=\"logo\">\n\t</a>\n\t\t<nav>\n\t\t\t<ul v-if=\"login\">\n\t\t\t\t<li><a v-link=\"{ path: '/'}\">首页</a></li>\n\t\t\t\t<li class=\"noread_msg\"><a v-link=\"{ path: '/message'}\">消息<div class=\"noread_num\" v-if=\"noread_num>0\"></div></a></li>\n\t\t\t\t<li><a v-link=\"{ path: '/my'}\">{{user.loginname}}</a></li>\n\t\t\t\t<li><a href=\"javascript:;\" @click=\"signOut\">退出</a></li>\n\t\t\t</ul>\n\t\t\t<ul v-else>\n\t\t\t\t<li class=\"wap_\"><a v-link=\"{ path: '/'}\">首页</a></li>\n\t\t\t\t<li class=\"wap_\"><a v-link=\"{ path: '/login'}\">登录</a></li>\n\t\t\t</ul>\n\t\t</nav>\n\t\t</div>\n</header>\n";
+	module.exports = "\n<header class=\"head\">\n\t<div class=\"header_box\">\n\t<a v-link=\"{ path: '/'}\">\n\t\t<img src=\"https://o4j806krb.qnssl.com/public/images/cnodejs_light.svg\" alt=\"\" id=\"logo\">\n\t</a>\n\t\t<nav>\n\t\t\t<ul v-if=\"login\">\n\t\t\t\t<li><a v-link=\"{ path: '/'}\">首页</a></li>\n\t\t\t\t<li class=\"noread_msg\"><a v-link=\"{ path: '/message'}\">消息<div class=\"noread_num\" v-if=\"noread_num>0\"></div></a></li>\n\t\t\t\t<li><a v-link=\"{ path: '/my'}\">{{user.loginname}}</a></li>\n\t\t\t\t<li><a href=\"javascript:;\" @click=\"sign_out\">退出</a></li>\n\t\t\t</ul>\n\t\t\t<ul v-else>\n\t\t\t\t<li class=\"wap_\"><a v-link=\"{ path: '/'}\">首页</a></li>\n\t\t\t\t<li class=\"wap_\"><a v-link=\"{ path: '/login'}\">登录</a></li>\n\t\t\t</ul>\n\t\t</nav>\n\t\t</div>\n</header>\n";
 
 /***/ },
 /* 38 */
@@ -16546,7 +16591,6 @@
 	exports.default = {
 		vuex: {
 			getters: {
-
 				accesstoken: function accesstoken(state) {
 					return state.accesstoken;
 				},
@@ -16632,7 +16676,7 @@
 	// 					&nbsp;
 	// 					<span class="bule_">{{item.author.loginname}}</span>&nbsp;回复了你的话题&nbsp;
 	// 				</span>
-	// 				<span :thisid="item.id" class="text_content bule_">{{item.topic.title}}</span>
+	// 				<span :thisid="item.id" class="text_content bule_" v-link="{name:'details',params:{ixd:item.topic.id}}">{{item.topic.title}}</span>
 	// 			</li>
 	// 		</ul>
 	// 		<div class="_title_">已读消息</div>
@@ -16643,11 +16687,12 @@
 	// 					&nbsp;
 	// 					<span class="bule_">{{item.author.loginname}}</span>&nbsp;回复了你的话题&nbsp;
 	// 				</span>
-	// 				<span :thisid="item.id" class="text_content bule_">{{item.topic.title}}</span>
+	// 				<span :thisid="item.id" class="text_content bule_" v-link="{name:'details',params:{ixd:item.topic.id}}" >{{item.topic.title}}</span>
 	// 			</li>
 	// 		</ul>
+	// 		<div @click="all_read_x" class="all_read_c">全部标记为已读</div>	
 	// 	</div>
-	// 	<div @click="all_read_x" class="all_read_c">全部标记为已读</div>	
+	//
 	// </template>
 	// <script>
 
@@ -16655,7 +16700,7 @@
 /* 64 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"lists\" style=\"background: #e1e1e1\">\n\t<div class=\"_title_\">未读消息</div>\n\t<ul class=\"yhf_and_ohf\">\n\t\t<li v-for=\"item in msg.hasnot_read_messages\">\n\t\t\t<span class=\"fl wqe\">\n\t\t\t\t<img :src=\"item.author.avatar_url\" alt=\"{{item.author.loginname}}\" title=\"{{item.author.loginname}}\">\n\t\t\t\t&nbsp;\n\t\t\t\t<span class=\"bule_\">{{item.author.loginname}}</span>&nbsp;回复了你的话题&nbsp;\n\t\t\t</span>\n\t\t\t<span :thisid=\"item.id\" class=\"text_content bule_\">{{item.topic.title}}</span>\n\t\t</li>\n\t</ul>\n\t<div class=\"_title_\">已读消息</div>\n\t<ul class=\"yhf_and_ohf\">\n\t\t<li v-for=\"item in msg.has_read_messages\">\n\t\t\t<span class=\"fl wqe\">\n\t\t\t\t<img :src=\"item.author.avatar_url\" alt=\"{{item.author.loginname}}\" title=\"{{item.author.loginname}}\">\n\t\t\t\t&nbsp;\n\t\t\t\t<span class=\"bule_\">{{item.author.loginname}}</span>&nbsp;回复了你的话题&nbsp;\n\t\t\t</span>\n\t\t\t<span :thisid=\"item.id\" class=\"text_content bule_\">{{item.topic.title}}</span>\n\t\t</li>\n\t</ul>\n</div>\n<div @click=\"all_read_x\" class=\"all_read_c\">全部标记为已读</div>\t\n";
+	module.exports = "\n<div class=\"lists\" style=\"background: #e1e1e1\">\n\t<div class=\"_title_\">未读消息</div>\n\t<ul class=\"yhf_and_ohf\">\n\t\t<li v-for=\"item in msg.hasnot_read_messages\">\n\t\t\t<span class=\"fl wqe\">\n\t\t\t\t<img :src=\"item.author.avatar_url\" alt=\"{{item.author.loginname}}\" title=\"{{item.author.loginname}}\">\n\t\t\t\t&nbsp;\n\t\t\t\t<span class=\"bule_\">{{item.author.loginname}}</span>&nbsp;回复了你的话题&nbsp;\n\t\t\t</span>\n\t\t\t<span :thisid=\"item.id\" class=\"text_content bule_\" v-link=\"{name:'details',params:{ixd:item.topic.id}}\">{{item.topic.title}}</span>\n\t\t</li>\n\t</ul>\n\t<div class=\"_title_\">已读消息</div>\n\t<ul class=\"yhf_and_ohf\">\n\t\t<li v-for=\"item in msg.has_read_messages\">\n\t\t\t<span class=\"fl wqe\">\n\t\t\t\t<img :src=\"item.author.avatar_url\" alt=\"{{item.author.loginname}}\" title=\"{{item.author.loginname}}\">\n\t\t\t\t&nbsp;\n\t\t\t\t<span class=\"bule_\">{{item.author.loginname}}</span>&nbsp;回复了你的话题&nbsp;\n\t\t\t</span>\n\t\t\t<span :thisid=\"item.id\" class=\"text_content bule_\" v-link=\"{name:'details',params:{ixd:item.topic.id}}\" >{{item.topic.title}}</span>\n\t\t</li>\n\t</ul>\n\t<div @click=\"all_read_x\" class=\"all_read_c\">全部标记为已读</div>\t\n</div>\n\n";
 
 /***/ },
 /* 65 */
@@ -16931,7 +16976,7 @@
 
 
 	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.next{\n\twidth: 100%;\n\theight: 50px;\n\tbackground: #eee;\n\toverflow: hidden;\n}\n.next .sx{\n\twidth: 70px;\n\theight: 35px;\n\tline-height: 35px;\n\ttext-align: center;\n\tmargin: 10px 5px 5px;\n\tbackground: #ddd;\n\tcursor: pointer;\n\tborder-radius:3px;\n}\n.next .shang{\n\tfloat: left;\n}\n.next .xia{\n\tfloat: right;\n}\n.one_list{\n\tbackground: #fff;\n\theight: 50px;\n    padding: 10px 0 10px 10px;\n    font-size: 14px;\n    box-sizing: border-box;\n}\n.one_list:hover{\n\tbackground: #cdcdcd;\n}\n.one_list:after{\n\tcontent: '';\n\tclear: both;\n}\n.one_list img{\n\twidth: 30px;\n\theight: 30px;\n\tdisplay: inline-block;\n\tvertical-align: top;\n}\n.one_list .red_rep{\n\tdisplay: inline-block;\n\theight: 30px;\n\tline-height: 30px;\n\twidth: 70px;\n\tfont-size: 12px;\n\ttext-align: center;\n\n}\n.one_list .type_{\n\twidth: 32px;\n\theight: 18px;\n\tdisplay: inline-block;\n\tfont-size: 12px;\n\ttext-align: center;\n\tborder-radius: 2px;\n\tpadding-top: 1px;\n\tmargin-top: 6px;\n}\n.one_list .high_light{\n\tbackground: #80bd01;\n\tcolor: #fff;\n\n}\n.nomo_light{\n\tbackground: #e5e5e5;\n\tcolor: #999;\n}\n.one_list .nomonal{\n\tbackground: #999;\n\tcolor: #444;\n}\n.one_list .time_{\n\tfloat: right;\n\twidth: 67px;\n\ttext-align: right;\n\tmargin-right: 5px;\n\tline-height: 30px;\n\tcolor: #444;\n\n}\n.one_list .title_{\n\tmargin-right: 72px;\n\tmargin-left: 135px;\n\tline-height: 30px;\n\twhite-space: nowrap;\n\toverflow: hidden;\n\ttext-overflow:ellipsis;\n}\n.one_list .title_ a{\n\ttext-decoration:none;\n\tcolor: #444;\n}\n.comtit_{\n    height: 39px;\n    background: #f6f6f6;\n    padding: 0 10px;\n    font-size: 14px;\n}\n.lists .comtit_ a{\n\ttext-decoration: none;\n\tcolor: #80bd01;\n\tdisplay: inline-block;\n\twidth: 42px;\n\theight: 23px;\n\ttext-align: center;\n\tpadding: 3px;\n\tfont-size: 16px;\n\tmargin: 5px 10px 0 0;\n\tborder-radius: 3px;\n\tline-height: 23px;\n\tline-height: 16px;\n}\n.lists .comtit_ a.avtive{\n\tbackground: #80bd01;\n\tcolor: #fff;\n}\n", ""]);
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.next{\n\twidth: 100%;\n\theight: 50px;\n\toverflow: hidden;\n}\n.next .sx{\n\twidth: 70px;\n\theight: 35px;\n\tline-height: 35px;\n\ttext-align: center;\n\tmargin: 10px 5px 5px;\n\tbackground: #ddd;\n\tcursor: pointer;\n\tborder-radius:3px;\n}\n.next .shang{\n\tfloat: left;\n}\n.next .xia{\n\tfloat: right;\n}\n.one_list{\n\tbackground: #fff;\n\theight: 50px;\n    padding: 10px 0 10px 10px;\n    font-size: 14px;\n    box-sizing: border-box;\n}\n.one_list:hover{\n\tbackground: #cdcdcd;\n}\n.one_list:after{\n\tcontent: '';\n\tclear: both;\n}\n.one_list img{\n\twidth: 30px;\n\theight: 30px;\n\tdisplay: inline-block;\n\tvertical-align: top;\n}\n.one_list .red_rep{\n\tdisplay: inline-block;\n\theight: 30px;\n\tline-height: 30px;\n\twidth: 70px;\n\tfont-size: 12px;\n\ttext-align: center;\n\n}\n.one_list .type_{\n\twidth: 32px;\n\theight: 18px;\n\tdisplay: inline-block;\n\tfont-size: 12px;\n\ttext-align: center;\n\tborder-radius: 2px;\n\tpadding-top: 1px;\n\tmargin-top: 6px;\n}\n.one_list .high_light{\n\tbackground: #80bd01;\n\tcolor: #fff;\n\n}\n.nomo_light{\n\tbackground: #e5e5e5;\n\tcolor: #999;\n}\n.one_list .nomonal{\n\tbackground: #999;\n\tcolor: #444;\n}\n.one_list .time_{\n\tfloat: right;\n\twidth: 67px;\n\ttext-align: right;\n\tmargin-right: 5px;\n\tline-height: 30px;\n\tcolor: #444;\n\n}\n.one_list .title_{\n\tmargin-right: 72px;\n\tmargin-left: 135px;\n\tline-height: 30px;\n\twhite-space: nowrap;\n\toverflow: hidden;\n\ttext-overflow:ellipsis;\n}\n.one_list .title_ a{\n\ttext-decoration:none;\n\tcolor: #444;\n}\n.comtit_{\n    height: 39px;\n    background: #f6f6f6;\n    padding: 0 10px;\n    font-size: 14px;\n}\n.lists .comtit_ a{\n\ttext-decoration: none;\n\tcolor: #80bd01;\n\tdisplay: inline-block;\n\twidth: 42px;\n\theight: 23px;\n\ttext-align: center;\n\tpadding: 3px;\n\tfont-size: 16px;\n\tmargin: 5px 10px 0 0;\n\tborder-radius: 3px;\n\tline-height: 23px;\n\tline-height: 16px;\n}\n.lists .comtit_ a.avtive{\n\tbackground: #80bd01;\n\tcolor: #fff;\n}\n", ""]);
 
 	// exports
 
@@ -17003,7 +17048,6 @@
 	// 	.next{
 	// 		width: 100%;
 	// 		height: 50px;
-	// 		background: #eee;
 	// 		overflow: hidden;
 	// 	}
 	// 	.next .sx{
@@ -17140,12 +17184,12 @@
 	var __vue_script__, __vue_template__
 	var __vue_styles__ = {}
 	__webpack_require__(76)
-	__vue_script__ = __webpack_require__(80)
+	__vue_script__ = __webpack_require__(79)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] components\\Details.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(81)
+	__vue_template__ = __webpack_require__(80)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	var __vue_options__ = typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports
@@ -17204,7 +17248,7 @@
 
 
 	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.lists{\n\tpadding: 2%;\n}\n.lists img{\n\tmax-width:100%;\n}\n.inner_top .pic_title{\n\tline-height: 40px;\n\toverflow: hidden;\n}\n.inner_top .pic_title>img{\n\twidth: 40px;\n\theight: 40px;\n\tborder-radius: 50%;\n\tdisplay: inline-block;\n\tvertical-align: middle;\n}\n.inner_top .pic_title>h2{\n\tdisplay: inline;\n\tline-height: 40px;\n\tvertical-align: middle;\n\tfont-size: 25px;\n\tword-break: break-all;\n}\n.inner_top .arc_info{\n\tpadding-left: 40px;\n}\n@media screen and (max-width: 640px){\n\t.inner_top .arc_info{\n\t\tpadding-left: 0px;\n\t\ttext-align: center;\n\t}\n}\n.inner_reply ul li{\n\tmargin-bottom: 20px;\n}\n.inner_reply ul li .reply_title>img{\n\twidth: 30px;\n\theight: 30px;\n}\n.au_name{\n\tfont-weight: 700;\n}\n.mt10{\n\tmargin-top: 10px;\n}\n.had_zan{\n\t\n\twidth: 13px;\n\theight: 15px;\n\tdisplay: inline-block;\n\tbackground-size: 13px 15px;\n\tbackground: url(" + __webpack_require__(78) + ") no-repeat center;\n}\n.no_zan{\n\t\n\twidth: 13px;\n\theight: 15px;\n\tdisplay: inline-block;\n\tbackground-size: 13px 15px;\n\tbackground: url(" + __webpack_require__(79) + ") no-repeat center;\n}\n", ""]);
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.lists{\n\tpadding: 2%;\n}\n.lists img{\n\tmax-width:100%;\n}\n.inner_top .pic_title{\n\tline-height: 40px;\n\toverflow: hidden;\n}\n.inner_top .pic_title>img{\n\twidth: 40px;\n\theight: 40px;\n\tborder-radius: 50%;\n\tdisplay: inline-block;\n\tvertical-align: middle;\n}\n.inner_top .pic_title>h2{\n\tdisplay: inline;\n\tline-height: 40px;\n\tvertical-align: middle;\n\tfont-size: 25px;\n\tword-break: break-all;\n}\n.inner_top .arc_info{\n\tpadding-left: 40px;\n}\n@media screen and (max-width: 640px){\n\t.inner_top .arc_info{\n\t\tpadding-left: 0px;\n\t\ttext-align: center;\n\t}\n}\n.inner_reply ul li{\n\tmargin-bottom: 20px;\n}\n.inner_reply ul li .reply_title>img{\n\twidth: 30px;\n\theight: 30px;\n}\n.au_name{\n\tfont-weight: 700;\n}\n.mt10{\n\tmargin-top: 10px;\n}\n.no_zan{\n\t\n\twidth: 17px;\n\theight: 15px;\n\tdisplay: inline-block;\n\tbackground: url(" + __webpack_require__(78) + ") no-repeat center;\n\tbackground-size: 17px 15px;\n\tcursor: pointer;\n}\n.text_area{\n\twidth: 100%;\n\theight: 200px;\n\tresize: none;\n\tline-height: 22px;\n\tpadding: 1%;\n}\n.tijiao{\n    width: 80px;\n    height: 37px;\n    background: #80bd01;\n    line-height: 37px;\n    text-align: center;\n    color: #fff;\n    margin: 15px 0;\n    border-radius: 3px;\n    cursor: pointer;\n}\n", ""]);
 
 	// exports
 
@@ -17213,16 +17257,10 @@
 /* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "img/1.min.png"
-
-/***/ },
-/* 79 */
-/***/ function(module, exports, __webpack_require__) {
-
 	module.exports = __webpack_require__.p + "img/2.min.png"
 
 /***/ },
-/* 80 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17252,27 +17290,41 @@
 	// 			{{{article.content}}}
 	// 		</div>
 	// 		<div class="inner_reply">
-	// 			<h3>回复</h3>
+	// 			<h4>回复</h4>
 	// 			<ul>
 	// 				<li v-for="item in article.replies">
 	// 					<div class="reply_title">
 	// 						<img :src="item.author.avatar_url" :alt="item.author.loginname"><span class="au_name"> {{item.author.loginname}} </span>{{$index+1}}楼 {{ when_(item.create_at) }}
 	// 						<span class="fr">
+	// 						<span :idyo="item.id" @click="zan_t" class="no_zan"></span>{{item.ups.length}}
+	// 						<span :rep_id="item.id" :rep_name="item.author.loginname" @click="at_someone">回复</span>
 	//
-	// 						<span :idyo="item.id" @click="zan_t" class="{ 'had_zan':return_f_t(user.id,item.ups),'no_zan':return_f_t(user.id,item.ups)}">1</span>
-	// 						{{item.ups.length}}
 	// 						</span>
 	// 						<div class="mt10">
+	//
 	// 							{{{item.content}}}
 	// 						</div>
 	// 					</div>
 	// 				</li>
 	// 			</ul>
 	// 		</div>
+	// 		<h4>添加回复</h4>
+	// 		<textarea class="text_area" maxlength="300" v-model='text'>
+	//
+	// 		</textarea>
+	// 		<div class="tijiao fr" @click="replay">提交</div>
 	// 	</div>
 	// </template>
 	// <script>
 	exports.default = {
+		data: function data() {
+			return {
+				text: '',
+				topic_id: '',
+				replay_name: ''
+			};
+		},
+
 		vuex: {
 			getters: {
 				article: function article(state) {
@@ -17287,39 +17339,130 @@
 			},
 			actions: {
 				load_inner: _actions.load_inner,
-				zan: _actions.zan
+				zan: _actions.zan,
+				replay_topic: _actions.replay_topic
 			}
 		},
 		methods: {
 			when_: _when.when,
-			return_f_t: function return_f_t(id, ups) {
-				alert();
-				for (i in ups) {
-					if (ups[i] == id) {
-						return true;
-					} else {
-						return false;
-					}
-				}
-			},
 			zan_t: function zan_t(e) {
 				var idyo = e.target.getAttribute('idyo');
-				this.zan(idyo, this.accesstoken);
+				this.zan(idyo, this.accesstoken, this.$route.params.ixd);
+			},
+
+			//回复文章
+			replay: function replay() {
+				if (this.text === '') {
+					alert('回复内容不能为空！');
+					return;
+				} else {
+					this.replay_topic(this.topic_id, this.accesstoken, this.text, this.replay_name);
+					this.text = '';
+				}
+			},
+
+			//回复某人
+			at_someone: function at_someone(e) {
+				var replayxid = e.target.getAttribute('rep_id');
+				var replayxname = e.target.getAttribute('rep_name');
+				var doc = document.body || document.documentElement;
+				doc.scrollTop = doc.offsetHeight;
+				this.text = '@' + replayxname;
+				this.replay_name = replayxid;
+				//console.log(replayxname)
 			}
 		},
 		route: {
 			data: function data(transition) {
 				var ixd_ = this.$route.params.ixd;
+				this.topic_id = ixd_;
 				this.load_inner(ixd_);
 			}
 		}
 	};
 
+	// </script>
+	// <style>
+	// 	.lists{
+	// 		padding: 2%;
+	// 	}
+	// 	.lists img{
+	// 		max-width:100%;
+	// 	}
+	// 	.inner_top .pic_title{
+	// 		line-height: 40px;
+	// 		overflow: hidden;
+	// 	}
+	// 	.inner_top .pic_title>img{
+	// 		width: 40px;
+	// 		height: 40px;
+	// 		border-radius: 50%;
+	// 		display: inline-block;
+	// 		vertical-align: middle;
+	// 	}
+	// 	.inner_top .pic_title>h2{
+	// 		display: inline;
+	// 		line-height: 40px;
+	// 		vertical-align: middle;
+	// 		font-size: 25px;
+	// 		word-break: break-all;
+	// 	}
+	// 	.inner_top .arc_info{
+	// 		padding-left: 40px;
+	// 	}
+	// 	@media screen and (max-width: 640px){
+	// 		.inner_top .arc_info{
+	// 			padding-left: 0px;
+	// 			text-align: center;
+	// 		}
+	// 	}
+	// 	.inner_reply ul li{
+	// 		margin-bottom: 20px;
+	// 	}
+	// 	.inner_reply ul li .reply_title>img{
+	// 		width: 30px;
+	// 		height: 30px;
+	// 	}
+	// 	.au_name{
+	// 		font-weight: 700;
+	// 	}
+	// 	.mt10{
+	// 		margin-top: 10px;
+	// 	}
+	// 	.no_zan{
+	//
+	// 		width: 17px;
+	// 		height: 15px;
+	// 		display: inline-block;
+	// 		background: url(../img/2.png) no-repeat center;
+	// 		background-size: 17px 15px;
+	// 		cursor: pointer;
+	// 	}
+	// 	.text_area{
+	// 		width: 100%;
+	// 		height: 200px;
+	// 		resize: none;
+	// 		line-height: 22px;
+	// 		padding: 1%;
+	// 	}
+	// 	.tijiao{
+	// 	    width: 80px;
+	// 	    height: 37px;
+	// 	    background: #80bd01;
+	// 	    line-height: 37px;
+	// 	    text-align: center;
+	// 	    color: #fff;
+	// 	    margin: 15px 0;
+	// 	    border-radius: 3px;
+	// 	    cursor: pointer;
+	// 	}
+	// </style>
+
 /***/ },
-/* 81 */
+/* 80 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"lists\">\n\t<div class=\"inner_top\">\n\t\t<div class=\"pic_title\">\n\t\t\t<img :src=\"article.author.avatar_url\" :alt=\"article.author.loginname\"><h2>{{article.title}}</h2>\n\t\t</div>\n\t\t<p class=\"arc_info\">\n\t\t\t作者：<span>{{article.author.loginname}}</span>\n\t\t\t发布于：<span>{{ when_(article.create_at) }}</span>\n\t\t\t回复：<span>{{article.reply_count}}</span>\n\t\t\t浏览：<span>{{article.visit_count}}</span>\n\t\t</p>\n\t</div>\n\t<div>\n\t\t{{{article.content}}}\n\t</div>\n\t<div class=\"inner_reply\">\n\t\t<h3>回复</h3>\n\t\t<ul>\n\t\t\t<li v-for=\"item in article.replies\">\n\t\t\t\t<div class=\"reply_title\">\n\t\t\t\t\t<img :src=\"item.author.avatar_url\" :alt=\"item.author.loginname\"><span class=\"au_name\"> {{item.author.loginname}} </span>{{$index+1}}楼 {{ when_(item.create_at) }}\n\t\t\t\t\t<span class=\"fr\">\n\t\t\t\t\t\t\n\t\t\t\t\t<span :idyo=\"item.id\" @click=\"zan_t\" class=\"{ 'had_zan':return_f_t(user.id,item.ups),'no_zan':return_f_t(user.id,item.ups)}\">1</span>\n\t\t\t\t\t{{item.ups.length}}\n\t\t\t\t\t</span>\n\t\t\t\t\t<div class=\"mt10\">\n\t\t\t\t\t\t{{{item.content}}}\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</li>\n\t\t</ul>\n\t</div>\n</div>\n";
+	module.exports = "\n<div class=\"lists\">\n\t<div class=\"inner_top\">\n\t\t<div class=\"pic_title\">\n\t\t\t<img :src=\"article.author.avatar_url\" :alt=\"article.author.loginname\"><h2>{{article.title}}</h2>\n\t\t</div>\n\t\t<p class=\"arc_info\">\n\t\t\t作者：<span>{{article.author.loginname}}</span>\n\t\t\t发布于：<span>{{ when_(article.create_at) }}</span>\n\t\t\t回复：<span>{{article.reply_count}}</span>\n\t\t\t浏览：<span>{{article.visit_count}}</span>\n\t\t</p>\n\t</div>\n\t<div>\n\t\t{{{article.content}}}\n\t</div>\n\t<div class=\"inner_reply\">\n\t\t<h4>回复</h4>\n\t\t<ul>\n\t\t\t<li v-for=\"item in article.replies\">\n\t\t\t\t<div class=\"reply_title\">\n\t\t\t\t\t<img :src=\"item.author.avatar_url\" :alt=\"item.author.loginname\"><span class=\"au_name\"> {{item.author.loginname}} </span>{{$index+1}}楼 {{ when_(item.create_at) }}\n\t\t\t\t\t<span class=\"fr\">\n\t\t\t\t\t<span :idyo=\"item.id\" @click=\"zan_t\" class=\"no_zan\"></span>{{item.ups.length}}\n\t\t\t\t\t<span :rep_id=\"item.id\" :rep_name=\"item.author.loginname\" @click=\"at_someone\">回复</span>\n\t\t\t\t\t\n\t\t\t\t\t</span>\n\t\t\t\t\t<div class=\"mt10\">\n\n\t\t\t\t\t\t{{{item.content}}}\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</li>\n\t\t</ul>\n\t</div>\n\t<h4>添加回复</h4>\n\t<textarea class=\"text_area\" maxlength=\"300\" v-model='text'>\n\n\t</textarea>\n\t<div class=\"tijiao fr\" @click=\"replay\">提交</div>\n</div>\n";
 
 /***/ }
 /******/ ]);

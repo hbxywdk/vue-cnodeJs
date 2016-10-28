@@ -15,29 +15,42 @@
 			{{{article.content}}}
 		</div>
 		<div class="inner_reply">
-			<h3>回复</h3>
+			<h4>回复</h4>
 			<ul>
 				<li v-for="item in article.replies">
 					<div class="reply_title">
 						<img :src="item.author.avatar_url" :alt="item.author.loginname"><span class="au_name"> {{item.author.loginname}} </span>{{$index+1}}楼 {{ when_(item.create_at) }}
 						<span class="fr">
-							
-						<span :idyo="item.id" @click="zan_t" class="{ 'had_zan':return_f_t(user.id,item.ups),'no_zan':return_f_t(user.id,item.ups)}">1</span>
-						{{item.ups.length}}
+						<span :idyo="item.id" @click="zan_t" class="no_zan"></span>{{item.ups.length}}
+						<span :rep_id="item.id" :rep_name="item.author.loginname" @click="at_someone">回复</span>
+						
 						</span>
 						<div class="mt10">
+
 							{{{item.content}}}
 						</div>
 					</div>
 				</li>
 			</ul>
 		</div>
+		<h4>添加回复</h4>
+		<textarea class="text_area" maxlength="300" v-model='text'>
+
+		</textarea>
+		<div class="tijiao fr" @click="replay">提交</div>
 	</div>
 </template>
 <script>
-import { load_inner , zan} from '../vuex/actions.js'
+import { load_inner , zan , replay_topic} from '../vuex/actions.js'
 import { when } from '../js/when.js'
 export default{
+	data(){
+		return{
+			text:'',
+			topic_id:'',
+			replay_name:''
+		}
+	},
 	vuex: {
 	  getters: {
 	    article: state => state.article,
@@ -46,37 +59,45 @@ export default{
 	  },
       actions: {
         load_inner,
-        zan
+        zan,
+        replay_topic,
       }
 	},
 	methods:{
 		when_:when,
-		return_f_t(id,ups){
-			alert()
-			for(i in ups){
-				if (ups[i]==id) {
-					return true;
-				}else{
-					return false;
-				}
-			}
-		},
 		zan_t(e){
 			let idyo=e.target.getAttribute('idyo');
-			this.zan(idyo,this.accesstoken);
-		}
+			this.zan(idyo,this.accesstoken,this.$route.params.ixd);
+		},
+		//回复文章
+		replay(){
+			if(this.text===''){
+				alert('回复内容不能为空！');
+				return;
+			}else{
+				this.replay_topic(this.topic_id,this.accesstoken,this.text,this.replay_name);
+				this.text='';
+			}
+		},
+		//回复某人
+		at_someone(e){
+			let replayxid=e.target.getAttribute('rep_id');
+			let replayxname=e.target.getAttribute('rep_name');
+			var doc=document.body || document.documentElement;
+			doc.scrollTop=doc.offsetHeight;
+			this.text=`@${replayxname}`;
+			this.replay_name=replayxid;
+			//console.log(replayxname)
+		},
 	},
 	route:{
       data(transition) {
       	let ixd_=this.$route.params.ixd;
+      	this.topic_id=ixd_;
         this.load_inner(ixd_);
 
       },
-	},
-//	components:{
-//		Home,
-//		Home2
-//	}
+	}
 }
 
 </script>
@@ -127,20 +148,31 @@ export default{
 	.mt10{
 		margin-top: 10px;
 	}
-	.had_zan{
-		
-		width: 13px;
-		height: 15px;
-		display: inline-block;
-		background-size: 13px 15px;
-		background: url(../img/1.png) no-repeat center;
-	}
 	.no_zan{
 		
-		width: 13px;
+		width: 17px;
 		height: 15px;
 		display: inline-block;
-		background-size: 13px 15px;
 		background: url(../img/2.png) no-repeat center;
+		background-size: 17px 15px;
+		cursor: pointer;
+	}
+	.text_area{
+		width: 100%;
+		height: 200px;
+		resize: none;
+		line-height: 22px;
+		padding: 1%;
+	}
+	.tijiao{
+	    width: 80px;
+	    height: 37px;
+	    background: #80bd01;
+	    line-height: 37px;
+	    text-align: center;
+	    color: #fff;
+	    margin: 15px 0;
+	    border-radius: 3px;
+	    cursor: pointer;
 	}
 </style>

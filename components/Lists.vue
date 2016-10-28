@@ -46,7 +46,6 @@ export default{
 	.next{
 		width: 100%;
 		height: 50px;
-		background: #eee;
 		overflow: hidden;
 	}
 	.next .sx{

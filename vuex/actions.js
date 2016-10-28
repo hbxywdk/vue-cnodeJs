@@ -152,26 +152,76 @@ export const load_inner=({dispatch},ixd)=>{
 		.then(function(data){
 			//console.log(1,data.data)
 			if (data.success) {
-				console.log("wdk",data.data)
+				//console.log("wdk",data.data)
 				dispatch('LOAD_INNER',data.data)
 			}
 		});
 	}
 }
-export const zan=({dispatch},idyo,myid)=>{
-	//let idyo=e.target.getAttribute('idyo');
-	alert(`https://cnodejs.org/api/v1/reply/${idyo}/ups`)
-	alert(`accesstoken=${myid}`)
+export const zan=({dispatch},idyo,myid,x)=>{
+	//alert(x);
 	post_(`https://cnodejs.org/api/v1/reply/${idyo}/ups`,`accesstoken=${myid}`)
 		.then(function(data){
 			if (data.success) {
 				alert('成功');
+				get_('https://cnodejs.org/api/v1/topic/'+x)
+				.then(function(data){
+					//console.log(1,data.data)
+					if (data.success) {
+						//console.log("wdk",data.data)
+						dispatch('LOAD_INNER',data.data)
+					}
+				});
 			}
 		})
 		.catch(function(){
 			alert('失败');
 		});
 }
-export const aaa=({dispatch})=>{
+
+export const replay_topic=({dispatch},topic_id,token,text,someone)=>{
+	if (someone!=='') {
+		post_(`https://cnodejs.org/api/v1/topic/${topic_id}/replies`,`accesstoken=${token}&content=${text}&reply_id=${someone}`)
+			.then(function(data){
+				if (data.success) {
+					alert('成功');
+					get_(`https://cnodejs.org/api/v1/topic/${topic_id}`)
+					.then(function(data){
+						//console.log(1,data.data)
+						if (data.success) {
+							//console.log("wdk",data.data)
+							dispatch('LOAD_INNER',data.data);
+						}
+					});
+				}
+			})
+			.catch(function(){
+				alert('失败');
+			});	
+	}else{
+		post_(`https://cnodejs.org/api/v1/topic/${topic_id}/replies`,`accesstoken=${token}&content=${text}`)
+			.then(function(data){
+				if (data.success) {
+					alert('成功');
+					get_(`https://cnodejs.org/api/v1/topic/${topic_id}`)
+					.then(function(data){
+						//console.log(1,data.data)
+						if (data.success) {
+							//console.log("wdk",data.data)
+							dispatch('LOAD_INNER',data.data);
+						}
+					});
+				}
+			})
+			.catch(function(){
+				alert('失败');
+			});	
+	}
+	
+}
+export const qwee=({dispatch})=>{
+
+}
+export const sadfas=({dispatch})=>{
 
 }

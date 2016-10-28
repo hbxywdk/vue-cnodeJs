@@ -72,9 +72,6 @@ li{list-style:none;}
 	color: #888;
 }
 @media screen and (max-width: 640px){
-    body {
-        background-color:lightblue;
-    }
 	.head #logo{
 		width: 120px;
 		height: 28px;
