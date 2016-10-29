@@ -25,10 +25,7 @@ export default{
       data( { to: { params: { type_ = 'all', page_ = 1 } } } ) {
         const topictype_ = type_;
         const currentpage_ = page_;
-        //alert(topicTab+"+"+page_)
-        // 获取文章列表
         this.get_list(topictype_,currentpage_);
-
       },
 	},
 	vuex: {
@@ -43,9 +40,6 @@ export default{
 	},
 	components:{
 		Lists		
-	},
-	ready(){
-		//alert(this.list_type)
 	},
 	computed:{
 		all(){
@@ -86,11 +80,9 @@ export default{
 	}
 
 }
-
 </script>
 <style>
 .bg-danger{
 	width: 96%;
 }
-
 </style>

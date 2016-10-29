@@ -87,7 +87,6 @@ export default{
 			doc.scrollTop=doc.offsetHeight;
 			this.text=`@${replayxname}`;
 			this.replay_name=replayxid;
-			//console.log(replayxname)
 		},
 	},
 	route:{
@@ -95,7 +94,6 @@ export default{
       	let ixd_=this.$route.params.ixd;
       	this.topic_id=ixd_;
         this.load_inner(ixd_);
-
       },
 	}
 }

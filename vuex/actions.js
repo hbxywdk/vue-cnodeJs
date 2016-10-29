@@ -1,15 +1,3 @@
-export const editNote = ({ dispatch }, e) => {
-  dispatch('EDIT_NOTE', e.target.value)
-}
-
-export const deleteNote = ({ dispatch }) => {
-  dispatch('DELETE_NOTE')
-}
-
-export const updateActiveNote = ({ dispatch }, note) => {
-  dispatch('SET_ACTIVE_NOTE', note)
-}
-
 /**
  * get请求 
  * @param  {String} options.url   api地址
@@ -56,29 +44,6 @@ post_('https://cnodejs.org/api/v1/accesstoken','accesstoken=413fe275-4016-41c8-9
 .then(function(data){
 	console.log(data);  
 })
-
-//Login.vue post请求检测 token 是否正确
-export const cheackToken = ({ dispatch },id)=>{
-	var param=`accesstoken=${id}`;
-	//返回promise
-	return post_('https://cnodejs.org/api/v1/accesstoken',param)
-	.then(function(data){
-		if (data.success) {
-			console.log(data);
-			dispatch('TOKEN_SUC',data,id);
-			set_user_rep(dispatch,data.loginname);
-			get_user_noread(dispatch,id)
-			window.localStorage.id=id;
-			//promise返回true 之后会执行跳转主页
-			return true;
-		}else{
-			console.log(data.error_msg);
-			dispatch('TOKEN_ERR');
-			return false;
-		}
-
-	})
-}
 //根据token拿到的用户id 获取用户更多信息
 const set_user_rep=(dispatch,id)=>{
 	let url_=`https://cnodejs.org/api/v1/user/${id}`;
@@ -109,6 +74,29 @@ const get_user_noread=(dispatch,token)=>{
 		
 	});
 }
+//Login.vue post请求检测 token 是否正确
+export const cheackToken = ({ dispatch },id)=>{
+	var param=`accesstoken=${id}`;
+	//返回promise
+	return post_('https://cnodejs.org/api/v1/accesstoken',param)
+	.then(function(data){
+		if (data.success) {
+			console.log(data);
+			dispatch('TOKEN_SUC',data,id);
+			set_user_rep(dispatch,data.loginname);
+			get_user_noread(dispatch,id)
+			window.localStorage.id=id;
+			//promise返回true 之后会执行跳转主页
+			return true;
+		}else{
+			console.log(data.error_msg);
+			dispatch('TOKEN_ERR');
+			return false;
+		}
+
+	})
+}
+
 //退出登录
 export const signOut=({dispatch})=>{
 	dispatch('SIGN_OUT');
@@ -128,10 +116,7 @@ export const all_read=({dispatch},token)=>{
 			});
 }
 
-/*export const type_change=({dispatch},e)=>{
-	let type_=e.target.getAttribute('thistype');
-	dispatch('TYPE_CHANGE',type_);
-}*/
+//获取帖子列表
 export const get_list=({dispatch},type,page)=>{
 	//alert(type+"+"+page)
 	dispatch('TYPE_CHANGE',type);
@@ -145,7 +130,7 @@ export const get_list=({dispatch},type,page)=>{
 	});
 
 }
-
+//加载帖子的内容
 export const load_inner=({dispatch},ixd)=>{
 	if (ixd) {
 		get_('https://cnodejs.org/api/v1/topic/'+ixd)
@@ -158,6 +143,7 @@ export const load_inner=({dispatch},ixd)=>{
 		});
 	}
 }
+//点赞
 export const zan=({dispatch},idyo,myid,x)=>{
 	//alert(x);
 	post_(`https://cnodejs.org/api/v1/reply/${idyo}/ups`,`accesstoken=${myid}`)
@@ -178,7 +164,7 @@ export const zan=({dispatch},idyo,myid,x)=>{
 			alert('失败');
 		});
 }
-
+//回复帖子 与 楼层
 export const replay_topic=({dispatch},topic_id,token,text,someone)=>{
 	if (someone!=='') {
 		post_(`https://cnodejs.org/api/v1/topic/${topic_id}/replies`,`accesstoken=${token}&content=${text}&reply_id=${someone}`)
@@ -219,9 +205,17 @@ export const replay_topic=({dispatch},topic_id,token,text,someone)=>{
 	}
 	
 }
-export const qwee=({dispatch})=>{
+export const post_tie=({dispatch},token,tit,tet,typ)=>{
+	if (tit&&tet&&typ) {
+		return post_('https://cnodejs.org/api/v1/topics',`accesstoken=${token}&title=${tit}&tab=${typ}&content=${tet}`)
+				.then(function(data){
+					if (data.success) {
+						console.log(data.success);
+					}else{
+						throw new Error('出错');
+					}
+				})
 
+	}
 }
-export const sadfas=({dispatch})=>{
 
-}

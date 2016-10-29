@@ -44,10 +44,7 @@ export default{
 			this.all_read(this.accesstoken);
 		}
 	}
-//	components:{
-//		Home,
-//		Home2
-//	}
+	
 }
 
 </script>

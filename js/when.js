@@ -31,8 +31,7 @@ function when(time){
     }else{
       result='刚刚发表';
     }
-    //console.log(cha);
-    //console.log(result);
+
     return result;
 }
 module.exports = {

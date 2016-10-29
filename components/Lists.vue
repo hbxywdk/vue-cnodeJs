@@ -17,7 +17,6 @@
 <script>
 import store from '../vuex/store'
 import { when } from '../js/when.js'
-
 export default{
 	props: ['pro'],
 	methods:{
@@ -38,9 +37,7 @@ export default{
 			page_nub: state => state.page_nub,
 		}
 	}
-
 }
-
 </script>
 <style>
 	.next{

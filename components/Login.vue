@@ -1,5 +1,7 @@
 <template>
 	<div class="lists">
+		<h3 class="cen">Access Token登录</h3>
+		<p class="cen">（注册cnodejs后可在设置中找到）</p>
 		<input type="text" maxlength="40" v-model="myToken" class="form-control">	
 		<a href="javascript:;" class="btn btn-primary" @click.prevent.stop="subToken">登录</a>
 		<p class="bg-danger" v-if="token_err">Token错误</p>
@@ -11,7 +13,7 @@ import { cheackToken } from '../vuex/actions.js'
 export default{
 	data(){
 		return {
-			myToken:'413fe275-4016-41c8-93cf-f7a196c83841'
+			myToken:''
 		}
 	},
 	vuex: {
@@ -38,7 +40,6 @@ export default{
 }
 </script>
 <style>
-/* 修改bt样式 */
 .bg-danger{
 	padding: 9px;
 	font-size: 18px;
@@ -62,5 +63,8 @@ export default{
 	border-radius: 3px;
 	display: block;
 
+}
+.cen{
+	text-align: center;
 }
 </style>

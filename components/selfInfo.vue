@@ -25,28 +25,15 @@
 	</aside>
 </template>
 <script>
-import { addplus } from '../vuex/actions.js'
 export default{
-	data(){
-		return {
-			a:'Home'
-		}
-	},
-	ready(){
-
-	},
 	vuex: {
 	  getters: {
 	    login: state => state.login,
 	    user: state => state.user,
 	    user_rep: state=> state.user_rep
-	  },
-      actions: {
-        addplus
-      }
+	  }
 	},
 }
-
 </script>
 <style>
 	.login_{

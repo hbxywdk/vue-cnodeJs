@@ -1,9 +1,5 @@
 module.exports = {
   entry: './main.js',
-/*  entry: {
-      index: './main.js',
-      vendor: ['vue', 'vuex']
-  },*/
   output: {
     path: __dirname,
     filename: 'build.js'

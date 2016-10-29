@@ -12,12 +12,10 @@ const state = {
   article:'',//存放文章详情页内容
   noread_num:0,//未读消息数量
   msg:'',//消息内容
-
   list:'',//首页文章列表
   page_nub:1,//文章页码
   list_type:'all',//文章类型
   article:'',//详情页内容
-
   tips:{
     show:false,
     cont:'加载中...'
@@ -25,14 +23,12 @@ const state = {
 }
 
 const mutations = {
-
-  //检测token成功设置
+  //检测token成功
   TOKEN_SUC (state,user,token) {
     state.user=user;
     state.accesstoken=token;
     state.token_err=false;
     state.login=true;
-    //alert(state.accesstoken)
   },
   //检测token失败设置
   TOKEN_ERR (state) {
@@ -41,7 +37,6 @@ const mutations = {
   //登录成功后插入用户 积分 回复 回帖 等信息
   SET_USER_REP (state,rep) {
     state.user_rep=rep;
-    //console.log(state.user_rep)
   },
   //退出登录
   SIGN_OUT(state){
@@ -51,7 +46,6 @@ const mutations = {
     state.user_rep='';
     state.login=false;
     window.localStorage.id='';
-
   },
   //设置未读消息数量
   SET_USER_NOREAD_NUM(state,num){
@@ -66,7 +60,6 @@ const mutations = {
     if(state.list_type!==type){
         state.list_type=type;
         state.page_nub=1;
-        //alert(state.page_nub)
     }
   },
   //设置获取到的文章列表
@@ -75,9 +68,6 @@ const mutations = {
     state.tips.show=false;
     state.list_type=ty;
     state.page_nub=pa;
-    //alert('asd'+state.page_nub)
-    //console.log(pa)
-
   },
   //显示加载中提示
   LOAD(state){
@@ -86,7 +76,6 @@ const mutations = {
   //添加文章详情
   LOAD_INNER(state,inner){
     state.article=inner;
-    //console.log(123,inner.content)
   },
 }
 

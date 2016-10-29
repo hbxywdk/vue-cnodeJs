@@ -9,6 +9,7 @@ import Message from './components/Message.vue'
 import List from './components/List.vue'
 import Lists from './components/Lists.vue'
 import Details from './components/Details.vue'
+import Post from './components/Post.vue'
 
 Vue.use(VueRouter);
 Vue.filter('trans_type',(type)=>{
@@ -36,6 +37,7 @@ router.map({
     '/my': { component: My ,name:'my'},
     '/message': { component: Message ,name:'message'},
     '/details/:ixd': { component: Details ,name:'details'},
+    '/post': { component: Post ,name:'post'},
 });
 
 router.start(Vue.extend(App), '#box');
